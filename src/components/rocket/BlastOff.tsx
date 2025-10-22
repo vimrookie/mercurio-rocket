@@ -82,6 +82,8 @@ const BlastOff: React.FC = () => {
                 variant="contained"
                 size="large"
                 startIcon={<RocketLaunch />}
+                component="a"
+                href="/signup"
                 sx={{
                   background: 'linear-gradient(135deg, #BDBDBD 0%, #9E9E9E 100%)',
                   color: '#000',
@@ -89,6 +91,7 @@ const BlastOff: React.FC = () => {
                   px: 6,
                   py: 2,
                   fontSize: '1.125rem',
+                  textDecoration: 'none',
                   '&:hover': {
                     background: 'linear-gradient(135deg, #E0E0E0 0%, #BDBDBD 100%)',
                     transform: 'translateY(-2px)',
@@ -96,9 +99,9 @@ const BlastOff: React.FC = () => {
                   },
                 }}
               >
-                Start Free Trial
+                Start Free Forever
               </Button>
-              
+
               <Button
                 variant="outlined"
                 size="large"

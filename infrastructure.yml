@@ -53,7 +53,7 @@ Resources:
         Aliases: !If [HasCustomDomain, [!Ref DomainName], !Ref "AWS::NoValue"]
         ViewerCertificate: !If 
           - HasCustomDomain
-          - AcmCertificateArn: "arn:aws:acm:us-east-1:885910645729:certificate/d17b788c-b760-434d-929f-9e423c3c21e6"
+          - AcmCertificateArn: "arn:aws:acm:us-east-1:885910645729:certificate/ded79c68-0624-433f-a97b-85731248759f"
             SslSupportMethod: sni-only
             MinimumProtocolVersion: TLSv1.2_2021
           - !Ref "AWS::NoValue"
@@ -99,3 +99,7 @@ Outputs:
     Value: !Ref WebsiteBucket
     Export:
       Name: !Sub "${AWS::StackName}-BucketName"
+      
+  CloudFrontDistributionId:
+    Description: "CloudFront Distribution ID"
+    Value: !Ref CloudFrontDistribution

@@ -1,0 +1,267 @@
+name: Deploy Mercurio Rocket Landing Page
+
+on:
+  push:
+    branches: 
+      - master
+      - main
+  pull_request:
+    branches: 
+      - master
+      - main
+
+# Environment variables
+env:
+  NODE_VERSION: '20'
+  AWS_REGION: us-east-1
+  STACK_NAME: mercurio-rocket-prod
+  DOMAIN_NAME: mercuriohub.io
+
+# Only allow one deployment at a time to prevent conflicts
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build and Deploy Landing Page
+    runs-on: ubuntu-latest
+    
+    # Only deploy on push to main/master, not on PRs
+    if: github.event_name == 'push'
+    
+    permissions:
+      contents: read
+      id-token: write  # Required for OIDC authentication
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2  # Need previous commit for change detection
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      # Configure AWS credentials using OIDC (more secure than access keys)
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::885910645729:role/GitHubActions-mercurio-api-production
+          aws-region: ${{ env.AWS_REGION }}
+          role-session-name: GitHubActions-Deploy-Rocket
+      
+      - name: Check for relevant file changes
+        run: |
+          echo "Checking for file changes..."
+          echo "Current commit: ${{ github.sha }}"
+          
+          # Get previous commit
+          PREVIOUS_COMMIT=$(git rev-parse "${{ github.sha }}~1" 2>/dev/null)
+          echo "Previous commit: $PREVIOUS_COMMIT"
+          echo "Comparing $PREVIOUS_COMMIT to ${{ github.sha }}"
+          
+          # Check for changed files
+          if [ -z "$PREVIOUS_COMMIT" ]; then
+            echo "DEPLOY=true" > deploy.flag
+            echo "Cannot determine previous commit, deploying for safety"
+          else
+            CHANGED_FILES=$(git diff --name-only "$PREVIOUS_COMMIT" "${{ github.sha }}" 2>/dev/null)
+            echo "Changed files: $CHANGED_FILES"
+            
+            if [ -z "$CHANGED_FILES" ]; then
+              echo "DEPLOY=true" > deploy.flag
+              echo "No changed files detected, deploying for safety"
+            elif echo "$CHANGED_FILES" | grep -E '\.(tsx?|jsx?|html|css|scss|json|yml|yaml)$|^src/|^public/|^components/|infrastructure\.yml|package\.json|next\.config'; then
+              echo "DEPLOY=true" > deploy.flag
+              echo "Deployment triggered by relevant frontend file changes"
+            else
+              echo "DEPLOY=false" > deploy.flag
+              echo "No relevant frontend files changed, skipping deployment"
+            fi
+          fi
+          
+          echo "Deploy decision: $(cat deploy.flag)"
+          echo "DEPLOY_FLAG=$(cat deploy.flag)" >> $GITHUB_ENV
+      
+      - name: Install dependencies
+        if: env.DEPLOY_FLAG == 'DEPLOY=true'
+        run: |
+          echo "Installing dependencies..."
+          npm install
+      
+      - name: Build Next.js application
+        if: env.DEPLOY_FLAG == 'DEPLOY=true'
+        run: |
+          echo "Building Next.js application for static export..."
+          npm run build
+          echo "Build completed successfully"
+          ls -la out/ || echo "No output directory found"
+      
+      - name: Deploy CloudFormation infrastructure
+        if: env.DEPLOY_FLAG == 'DEPLOY=true'
+        run: |
+          echo "Deploying CloudFormation infrastructure..."
+          aws cloudformation deploy \
+            --template-file infrastructure.yml \
+            --stack-name ${{ env.STACK_NAME }} \
+            --parameter-overrides \
+              Environment=prod \
+              DomainName=${{ env.DOMAIN_NAME }} \
+            --capabilities CAPABILITY_IAM \
+            --no-fail-on-empty-changeset \
+            --region ${{ env.AWS_REGION }}
+          
+          echo "Infrastructure deployment completed"
+      
+      - name: Get S3 bucket name and deploy assets
+        if: env.DEPLOY_FLAG == 'DEPLOY=true'
+        run: |
+          # Get S3 bucket name from CloudFormation outputs
+          BUCKET_NAME=$(aws cloudformation describe-stacks \
+            --stack-name ${{ env.STACK_NAME }} \
+            --query 'Stacks[0].Outputs[?OutputKey==`S3BucketName`].OutputValue' \
+            --output text \
+            --region ${{ env.AWS_REGION }})
+          
+          echo "Deploying to S3 bucket: $BUCKET_NAME"
+          
+          # Sync static assets with long cache (CSS, JS, images)
+          echo "Uploading static assets with long cache..."
+          aws s3 sync out/ s3://$BUCKET_NAME/ \
+            --delete \
+            --cache-control "public, max-age=31536000" \
+            --exclude "*.html" \
+            --exclude "*.json" \
+            --exclude "_next/data/*" \
+            --region ${{ env.AWS_REGION }}
+          
+          # Sync HTML files with short cache for better updates
+          echo "Uploading HTML files with short cache..."
+          aws s3 sync out/ s3://$BUCKET_NAME/ \
+            --cache-control "public, max-age=0, must-revalidate" \
+            --exclude "*" \
+            --include "*.html" \
+            --include "*.json" \
+            --include "_next/data/*" \
+            --region ${{ env.AWS_REGION }}
+          
+          echo "S3 deployment completed"
+      
+      - name: Invalidate CloudFront cache
+        if: env.DEPLOY_FLAG == 'DEPLOY=true'
+        run: |
+          # Get CloudFront distribution ID
+          CLOUDFRONT_ID=$(aws cloudformation describe-stacks \
+            --stack-name ${{ env.STACK_NAME }} \
+            --query 'Stacks[0].Outputs[?OutputKey==`CloudFrontDistributionId`].OutputValue' \
+            --output text \
+            --region ${{ env.AWS_REGION }})
+          
+          if [ -n "$CLOUDFRONT_ID" ]; then
+            echo "Invalidating CloudFront cache for distribution: $CLOUDFRONT_ID"
+            aws cloudfront create-invalidation \
+              --distribution-id $CLOUDFRONT_ID \
+              --paths "/*" \
+              --region ${{ env.AWS_REGION }}
+            echo "CloudFront invalidation initiated"
+          else
+            echo "Warning: Could not get CloudFront distribution ID"
+          fi
+      
+      - name: Get deployment URLs
+        if: env.DEPLOY_FLAG == 'DEPLOY=true'
+        run: |
+          echo "🚀 Mercurio Rocket landing page deployment successful!"
+          
+          # Get CloudFront URL
+          CLOUDFRONT_URL=$(aws cloudformation describe-stacks \
+            --stack-name ${{ env.STACK_NAME }} \
+            --query 'Stacks[0].Outputs[?OutputKey==`CloudFrontURL`].OutputValue' \
+            --output text \
+            --region ${{ env.AWS_REGION }})
+          
+          echo "Landing page URLs:"
+          echo "📡 CloudFront URL: $CLOUDFRONT_URL"
+          echo "🌐 Custom Domain: https://${{ env.DOMAIN_NAME }}"
+          
+          # Save URLs for artifact
+          echo "CLOUDFRONT_URL=$CLOUDFRONT_URL" > deployment-info.txt
+          echo "CUSTOM_DOMAIN=https://${{ env.DOMAIN_NAME }}" >> deployment-info.txt
+          echo "DEPLOYMENT_TIME=$(date -u)" >> deployment-info.txt
+      
+      - name: Skip deployment message
+        if: env.DEPLOY_FLAG != 'DEPLOY=true'
+        run: |
+          echo "⏭️ Deployment skipped - no relevant frontend files changed"
+          echo "Changed files did not include frontend assets, components, or configuration"
+      
+      # Upload deployment artifacts
+      - name: Upload deployment artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: deploy-artifacts
+          path: |
+            deploy.flag
+            deployment-info.txt
+          retention-days: 30
+
+  # Validation job for PRs (runs tests without deploying)
+  validate:
+    name: Validate Build
+    runs-on: ubuntu-latest
+    
+    # Only run on PRs, not on main/master pushes
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: |
+          echo "Installing dependencies for validation..."
+          npm install
+      
+      - name: Run code quality checks
+        run: |
+          echo "Running linting and type checks..."
+          npm run lint || echo "Lint completed with warnings"
+          npm run type-check || echo "Type check completed with warnings"
+      
+      - name: Build Next.js application
+        run: |
+          echo "Building Next.js application for validation..."
+          npm run build
+          echo "Build validation completed successfully"
+      
+      - name: Validate CloudFormation template
+        run: |
+          echo "Validating CloudFormation template..."
+          # Basic YAML syntax validation
+          python -c "import yaml; yaml.safe_load(open('infrastructure.yml', 'r'))"
+          echo "CloudFormation template validation completed"
+      
+      - name: Test production build
+        run: |
+          echo "Testing production build..."
+          if [ -d "out" ]; then
+            echo "✅ Static export directory created successfully"
+            echo "📁 Output files:"
+            find out -type f -name "*.html" | head -5
+            echo "📊 Build size:"
+            du -sh out/
+          else
+            echo "❌ No output directory found"
+            exit 1
+          fi

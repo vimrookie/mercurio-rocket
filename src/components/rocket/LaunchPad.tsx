@@ -88,19 +88,22 @@ const LaunchPad: React.FC = () => {
                 variant="contained"
                 size="large"
                 startIcon={<RocketLaunch />}
+                component="a"
+                href="/signup"
                 sx={{
                   background: 'linear-gradient(135deg, #BDBDBD 0%, #9E9E9E 100%)',
                   color: '#000',
                   fontWeight: 700,
                   px: 4,
                   py: 1.5,
+                  textDecoration: 'none',
                   '&:hover': {
                     background: 'linear-gradient(135deg, #E0E0E0 0%, #BDBDBD 100%)',
                     transform: 'translateY(-2px)',
                   },
                 }}
               >
-                Blast Off - Free Trial
+                Start Free Forever
               </Button>
               <Button
                 variant="outlined"

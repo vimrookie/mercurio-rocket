@@ -9,11 +9,11 @@ const plans = [
     name: 'Free',
     price: '$0',
     period: 'forever',
-    description: 'Perfect for testing our capabilities',
+    description: 'Perfect for testing and small projects',
     features: [
       '50 documents/month',
       '2 team members',
-      '100 MB storage',
+      '1 WhatsApp session',
       'OCR processing',
       'Google Sheets integration',
       'Community support',
@@ -21,60 +21,83 @@ const plans = [
     buttonText: 'Start Free',
     buttonVariant: 'outlined' as const,
     popular: false,
+    savingsText: null,
   },
   {
-    name: 'Basic',
-    price: '$25',
+    name: 'Starter',
+    price: '$15',
     period: 'month',
-    description: 'Ideal for growing businesses',
+    description: 'For growing small businesses',
     features: [
-      '500 documents/month',
-      '10 team members',
-      '1 GB storage',
+      '100 documents/month',
+      '3 team members',
+      '1 WhatsApp session',
       'Everything in Free',
       'API access',
       'Email support',
     ],
-    buttonText: 'Launch Basic',
+    buttonText: 'Get Starter',
     buttonVariant: 'contained' as const,
-    popular: true,
+    popular: false,
+    savingsText: null,
   },
   {
-    name: 'Premium',
-    price: '$50',
+    name: 'Growth',
+    price: '$49',
     period: 'month',
-    description: 'Advanced features for serious users',
+    description: 'Scale your operations with confidence',
     features: [
-      '2,000 documents/month',
-      '50 team members',
-      '5 GB storage',
-      'Everything in Basic',
-      'Advanced analytics',
+      '500 documents/month',
+      '10 team members',
+      '3 WhatsApp sessions',
+      'Everything in Starter',
+      'Advanced filtering',
       'Data export',
       'Priority support',
     ],
-    buttonText: 'Launch Premium',
+    buttonText: 'Get Growth',
+    buttonVariant: 'contained' as const,
+    popular: true,
+    savingsText: '$10/month vs pay-as-you-go',
+  },
+  {
+    name: 'Business',
+    price: '$149',
+    period: 'month',
+    description: 'Enterprise-grade automation',
+    features: [
+      '2,000 documents/month',
+      '50 team members',
+      '10 WhatsApp sessions',
+      'Everything in Growth',
+      'Advanced analytics',
+      'Webhook integrations',
+      'Phone & email support',
+    ],
+    buttonText: 'Get Business',
     buttonVariant: 'contained' as const,
     popular: false,
+    savingsText: '$50/month vs pay-as-you-go',
   },
   {
     name: 'Enterprise',
-    price: '$100',
-    period: 'month',
-    description: 'Complete solution for large organizations',
+    price: 'Custom',
+    period: 'contact us',
+    description: 'Tailored for large organizations',
     features: [
-      '10,000 documents/month',
-      '200 team members',
-      '25 GB storage',
-      'Everything in Premium',
-      'Webhooks',
-      'Single Sign-On (SSO)',
-      'Custom integrations',
-      'Dedicated support',
+      'Unlimited documents',
+      'Unlimited team members',
+      'Unlimited WhatsApp sessions',
+      'Everything in Business',
+      'Dedicated infrastructure',
+      'Custom SLA',
+      'SSO integration',
+      '24/7 dedicated support',
     ],
-    buttonText: 'Launch Enterprise',
+    buttonText: 'Contact Sales',
     buttonVariant: 'contained' as const,
     popular: false,
+    savingsText: null,
   },
 ];
 
@@ -89,7 +112,7 @@ const FuelPricing: React.FC = () => {
     >
       <Container maxWidth="lg">
         {/* Section Header */}
-        <Box sx={{ textAlign: 'center', mb: 8 }}>
+        <Box sx={{ textAlign: 'center', mb: 6 }}>
           <Typography
             variant="h2"
             sx={{
@@ -119,9 +142,45 @@ const FuelPricing: React.FC = () => {
         </Box>
 
         {/* Pricing Cards */}
-        <Box sx={{ display: 'flex', gap: 4, flexWrap: 'wrap', mb: 8 }}>
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: {
+              xs: '1fr',
+              sm: 'repeat(2, 1fr)',
+              md: 'repeat(3, 1fr)',
+              lg: 'repeat(5, 1fr)'
+            },
+            gap: 3,
+            mb: 8,
+            maxWidth: '1400px',
+            mx: 'auto',
+            pt: 5, // Increased padding top to accommodate the chip
+          }}
+        >
           {plans.map((plan, index) => (
-            <Box key={index} sx={{ flex: { xs: '1 1 100%', md: '1 1 45%', lg: '1 1 22%' }, minWidth: '280px' }}>
+            <Box key={index} sx={{ position: 'relative' }}>
+              {plan.popular && (
+                <Chip
+                  label="Most Popular"
+                  icon={<Star />}
+                  sx={{
+                    position: 'absolute',
+                    top: -12,
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    background: 'linear-gradient(135deg, #BDBDBD 0%, #9E9E9E 100%)',
+                    color: '#000',
+                    fontWeight: 700,
+                    zIndex: 20,
+                    px: 2,
+                    py: 0.5,
+                    fontSize: '0.85rem',
+                    height: 'auto',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                  }}
+                />
+              )}
               <Card
                 sx={{
                   height: '100%',
@@ -134,7 +193,6 @@ const FuelPricing: React.FC = () => {
                   border: plan.popular
                     ? '2px solid #BDBDBD'
                     : '1px solid rgba(255, 255, 255, 0.1)',
-                  position: 'relative',
                   transition: 'all 0.3s ease',
                   '&:hover': {
                     transform: 'translateY(-8px)',
@@ -144,21 +202,6 @@ const FuelPricing: React.FC = () => {
                   },
                 }}
               >
-                {plan.popular && (
-                  <Chip
-                    label="Most Popular"
-                    icon={<Star />}
-                    sx={{
-                      position: 'absolute',
-                      top: -12,
-                      left: '50%',
-                      transform: 'translateX(-50%)',
-                      background: 'linear-gradient(135deg, #BDBDBD 0%, #9E9E9E 100%)',
-                      color: '#000',
-                      fontWeight: 700,
-                    }}
-                  />
-                )}
 
                 <CardContent sx={{ p: 4, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                   <Typography
@@ -228,9 +271,12 @@ const FuelPricing: React.FC = () => {
                     size="large"
                     fullWidth
                     startIcon={<RocketLaunch />}
+                    component="a"
+                    href={plan.name === 'Free' ? '/signup' : undefined}
                     sx={{
                       mt: 4,
                       py: 1.5,
+                      textDecoration: 'none',
                       ...(plan.buttonVariant === 'contained' && {
                         background: plan.popular
                           ? 'linear-gradient(135deg, #BDBDBD 0%, #9E9E9E 100%)'
