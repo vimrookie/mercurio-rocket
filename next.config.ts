@@ -7,8 +7,8 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true, // Required for static export
   },
-  // Optimize for CDN deployment
-  assetPrefix: process.env.NODE_ENV === 'production' ? 'https://mercuriohub.io' : '',
+  // Use relative paths for assets to work on any domain (CloudFront or custom domain)
+  assetPrefix: '',
 };
 
 export default nextConfig;

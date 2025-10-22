@@ -31,12 +31,18 @@ if ($LASTEXITCODE -ne 0) {
 $stackName = "mercurio-rocket-$Environment"
 Write-Host "`n☁️ Deploying CloudFormation stack: $stackName" -ForegroundColor Green
 
+# Set domain name based on environment
+$domainName = ""
+if ($Environment -eq "prod") {
+    $domainName = "mercuriohub.io"
+}
+
 aws cloudformation deploy `
     --template-file infrastructure.yml `
     --stack-name $stackName `
     --parameter-overrides `
         Environment=$Environment `
-        DomainName=$(if ($Environment -eq "prod") { "mercuriohub.io" } else { "" }) `
+        DomainName=$domainName `
     --capabilities CAPABILITY_IAM `
     --region $Region `
     --no-fail-on-empty-changeset
