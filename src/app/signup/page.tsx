@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Box,
   Container,
@@ -15,13 +15,18 @@ import {
   InputAdornment,
   IconButton,
   CircularProgress,
-} from '@mui/material';
-import { ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import { RocketLaunch, Visibility, VisibilityOff, ArrowBack } from '@mui/icons-material';
-import theme from '@/lib/theme';
-import MercurioLogo from '@/components/shared/MercurioLogo';
-import { signupOrganization, ApiError } from '@/lib/api';
+} from "@mui/material";
+import { ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import {
+  RocketLaunch,
+  Visibility,
+  VisibilityOff,
+  ArrowBack,
+} from "@mui/icons-material";
+import theme from "@/lib/theme";
+import MercurioLogo from "@/components/shared/MercurioLogo";
+import { signupOrganization, ApiError } from "@/lib/api";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -32,18 +37,19 @@ export default function SignupPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [formData, setFormData] = useState({
-    organizationName: '',
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    organizationName: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
 
-  const handleChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => ({ ...prev, [field]: event.target.value }));
-    setError(null); // Clear error when user types
-  };
+  const handleChange =
+    (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+      setFormData((prev) => ({ ...prev, [field]: event.target.value }));
+      setError(null); // Clear error when user types
+    };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -53,30 +59,30 @@ export default function SignupPage() {
     try {
       // Client-side validation
       if (formData.password !== formData.confirmPassword) {
-        throw new Error('Passwords do not match');
+        throw new Error("Passwords do not match");
       }
 
       // Validate password requirements
       const passwordErrors: string[] = [];
 
       if (formData.password.length < 8) {
-        passwordErrors.push('at least 8 characters');
+        passwordErrors.push("at least 8 characters");
       }
       if (!/[A-Z]/.test(formData.password)) {
-        passwordErrors.push('one uppercase letter');
+        passwordErrors.push("one uppercase letter");
       }
       if (!/[a-z]/.test(formData.password)) {
-        passwordErrors.push('one lowercase letter');
+        passwordErrors.push("one lowercase letter");
       }
       if (!/\d/.test(formData.password)) {
-        passwordErrors.push('one number');
+        passwordErrors.push("one number");
       }
       if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(formData.password)) {
-        passwordErrors.push('one special character');
+        passwordErrors.push("one special character");
       }
 
       if (passwordErrors.length > 0) {
-        throw new Error(`Password must contain ${passwordErrors.join(', ')}`);
+        throw new Error(`Password must contain ${passwordErrors.join(", ")}`);
       }
 
       // Call API
@@ -88,8 +94,8 @@ export default function SignupPage() {
       // Redirect to login after 3 seconds
       // Use environment variable for login URL (local vs production)
       const loginUrl = process.env.NEXT_PUBLIC_APP_URL
-        ? `${process.env.NEXT_PUBLIC_APP_URL}/login`
-        : 'https://app.mercuriohub.io/login';
+        ? `${process.env.NEXT_PUBLIC_APP_URL}/login?logout=true`
+        : "https://app.mercuriohub.io/login?logout=true";
 
       setTimeout(() => {
         window.location.href = loginUrl;
@@ -98,14 +104,14 @@ export default function SignupPage() {
       if (err instanceof ApiError) {
         if (err.details && err.details.length > 0) {
           // Show password validation errors
-          setError(err.details.map((d) => d.message).join('. '));
+          setError(err.details.map((d) => d.message).join(". "));
         } else {
           setError(err.error);
         }
       } else if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError('An unexpected error occurred. Please try again.');
+        setError("An unexpected error occurred. Please try again.");
       }
     } finally {
       setLoading(false);
@@ -118,32 +124,36 @@ export default function SignupPage() {
         <CssBaseline />
         <Box
           sx={{
-            minHeight: '100vh',
-            background: 'linear-gradient(135deg, #181C23 0%, #232733 100%)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            minHeight: "100vh",
+            background: "linear-gradient(135deg, #181C23 0%, #232733 100%)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             p: 2,
           }}
         >
           <Card
             sx={{
               maxWidth: 500,
-              width: '100%',
-              background: 'rgba(35, 39, 51, 0.8)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(189, 189, 189, 0.2)',
+              width: "100%",
+              background: "rgba(35, 39, 51, 0.8)",
+              backdropFilter: "blur(10px)",
+              border: "1px solid rgba(189, 189, 189, 0.2)",
             }}
           >
-            <CardContent sx={{ p: 6, textAlign: 'center' }}>
+            <CardContent sx={{ p: 6, textAlign: "center" }}>
               <MercurioLogo size={80} animated />
-              <Typography variant="h4" sx={{ mt: 3, mb: 2, color: 'white', fontWeight: 700 }}>
+              <Typography
+                variant="h4"
+                sx={{ mt: 3, mb: 2, color: "white", fontWeight: 700 }}
+              >
                 Welcome to Mercurio!
               </Typography>
               <Alert severity="success" sx={{ mb: 3 }}>
-                Your account has been created successfully! Redirecting you to login...
+                Your account has been created successfully! Redirecting you to
+                login...
               </Alert>
-              <CircularProgress sx={{ color: 'primary.main' }} />
+              <CircularProgress sx={{ color: "primary.main" }} />
             </CardContent>
           </Card>
         </Box>
@@ -156,27 +166,27 @@ export default function SignupPage() {
       <CssBaseline />
       <Box
         sx={{
-          minHeight: '100vh',
-          background: 'linear-gradient(135deg, #181C23 0%, #232733 100%)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          minHeight: "100vh",
+          background: "linear-gradient(135deg, #181C23 0%, #232733 100%)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
           p: 2,
-          position: 'relative',
+          position: "relative",
         }}
       >
         {/* Back button */}
         <Button
           startIcon={<ArrowBack />}
-          onClick={() => router.push('/')}
+          onClick={() => router.push("/")}
           sx={{
-            position: 'absolute',
+            position: "absolute",
             top: 20,
             left: 20,
-            color: 'text.secondary',
-            '&:hover': {
-              color: 'primary.main',
-              backgroundColor: 'rgba(189, 189, 189, 0.08)',
+            color: "text.secondary",
+            "&:hover": {
+              color: "primary.main",
+              backgroundColor: "rgba(189, 189, 189, 0.08)",
             },
           }}
         >
@@ -186,27 +196,27 @@ export default function SignupPage() {
         <Container maxWidth="sm">
           <Card
             sx={{
-              background: 'rgba(35, 39, 51, 0.8)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(189, 189, 189, 0.2)',
+              background: "rgba(35, 39, 51, 0.8)",
+              backdropFilter: "blur(10px)",
+              border: "1px solid rgba(189, 189, 189, 0.2)",
             }}
           >
             <CardContent sx={{ p: 6 }}>
               {/* Logo and Header */}
-              <Box sx={{ textAlign: 'center', mb: 4 }}>
+              <Box sx={{ textAlign: "center", mb: 4 }}>
                 <MercurioLogo size={60} animated />
                 <Typography
                   variant="h4"
                   sx={{
                     mt: 3,
                     mb: 1,
-                    color: 'white',
+                    color: "white",
                     fontWeight: 700,
                   }}
                 >
                   Start Free Forever
                 </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                <Typography variant="body2" sx={{ color: "text.secondary" }}>
                   Create your organization and start processing documents
                 </Typography>
               </Box>
@@ -224,28 +234,28 @@ export default function SignupPage() {
                   fullWidth
                   label="Organization Name"
                   value={formData.organizationName}
-                  onChange={handleChange('organizationName')}
+                  onChange={handleChange("organizationName")}
                   required
                   sx={{ mb: 3 }}
-                  InputLabelProps={{ style: { color: '#BDBDBD' } }}
+                  InputLabelProps={{ style: { color: "#BDBDBD" } }}
                 />
 
-                <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+                <Box sx={{ display: "flex", gap: 2, mb: 3 }}>
                   <TextField
                     fullWidth
                     label="First Name"
                     value={formData.firstName}
-                    onChange={handleChange('firstName')}
+                    onChange={handleChange("firstName")}
                     required
-                    InputLabelProps={{ style: { color: '#BDBDBD' } }}
+                    InputLabelProps={{ style: { color: "#BDBDBD" } }}
                   />
                   <TextField
                     fullWidth
                     label="Last Name"
                     value={formData.lastName}
-                    onChange={handleChange('lastName')}
+                    onChange={handleChange("lastName")}
                     required
-                    InputLabelProps={{ style: { color: '#BDBDBD' } }}
+                    InputLabelProps={{ style: { color: "#BDBDBD" } }}
                   />
                 </Box>
 
@@ -254,28 +264,28 @@ export default function SignupPage() {
                   label="Email"
                   type="email"
                   value={formData.email}
-                  onChange={handleChange('email')}
+                  onChange={handleChange("email")}
                   required
                   sx={{ mb: 3 }}
-                  InputLabelProps={{ style: { color: '#BDBDBD' } }}
+                  InputLabelProps={{ style: { color: "#BDBDBD" } }}
                 />
 
                 <TextField
                   fullWidth
                   label="Password"
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   value={formData.password}
-                  onChange={handleChange('password')}
+                  onChange={handleChange("password")}
                   required
                   sx={{ mb: 3 }}
-                  InputLabelProps={{ style: { color: '#BDBDBD' } }}
+                  InputLabelProps={{ style: { color: "#BDBDBD" } }}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
                         <IconButton
                           onClick={() => setShowPassword(!showPassword)}
                           edge="end"
-                          sx={{ color: 'text.secondary' }}
+                          sx={{ color: "text.secondary" }}
                         >
                           {showPassword ? <VisibilityOff /> : <Visibility />}
                         </IconButton>
@@ -288,21 +298,27 @@ export default function SignupPage() {
                 <TextField
                   fullWidth
                   label="Confirm Password"
-                  type={showConfirmPassword ? 'text' : 'password'}
+                  type={showConfirmPassword ? "text" : "password"}
                   value={formData.confirmPassword}
-                  onChange={handleChange('confirmPassword')}
+                  onChange={handleChange("confirmPassword")}
                   required
                   sx={{ mb: 4 }}
-                  InputLabelProps={{ style: { color: '#BDBDBD' } }}
+                  InputLabelProps={{ style: { color: "#BDBDBD" } }}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
                         <IconButton
-                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                          onClick={() =>
+                            setShowConfirmPassword(!showConfirmPassword)
+                          }
                           edge="end"
-                          sx={{ color: 'text.secondary' }}
+                          sx={{ color: "text.secondary" }}
                         >
-                          {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                          {showConfirmPassword ? (
+                            <VisibilityOff />
+                          ) : (
+                            <Visibility />
+                          )}
                         </IconButton>
                       </InputAdornment>
                     ),
@@ -314,41 +330,45 @@ export default function SignupPage() {
                   type="submit"
                   variant="contained"
                   size="large"
-                  startIcon={loading ? <CircularProgress size={20} /> : <RocketLaunch />}
+                  startIcon={
+                    loading ? <CircularProgress size={20} /> : <RocketLaunch />
+                  }
                   disabled={loading}
                   sx={{
-                    background: 'linear-gradient(135deg, #BDBDBD 0%, #9E9E9E 100%)',
-                    color: '#000',
+                    background:
+                      "linear-gradient(135deg, #BDBDBD 0%, #9E9E9E 100%)",
+                    color: "#000",
                     fontWeight: 700,
                     py: 1.5,
                     mb: 3,
-                    '&:hover': {
-                      background: 'linear-gradient(135deg, #E0E0E0 0%, #BDBDBD 100%)',
+                    "&:hover": {
+                      background:
+                        "linear-gradient(135deg, #E0E0E0 0%, #BDBDBD 100%)",
                     },
-                    '&:disabled': {
-                      background: 'rgba(189, 189, 189, 0.3)',
-                      color: 'rgba(0, 0, 0, 0.5)',
+                    "&:disabled": {
+                      background: "rgba(189, 189, 189, 0.3)",
+                      color: "rgba(0, 0, 0, 0.5)",
                     },
                   }}
                 >
-                  {loading ? 'Creating Account...' : 'Create Account'}
+                  {loading ? "Creating Account..." : "Create Account"}
                 </Button>
 
                 {/* Login Link */}
-                <Box sx={{ textAlign: 'center' }}>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    Already have an account?{' '}
+                <Box sx={{ textAlign: "center" }}>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    Already have an account?{" "}
                     <Link
                       href={
                         process.env.NEXT_PUBLIC_APP_URL
                           ? `${process.env.NEXT_PUBLIC_APP_URL}/login`
-                          : 'https://app.mercuriohub.io/login'
+                          : "https://app.mercuriohub.io/login"
                       }
                       sx={{
-                        color: 'primary.main',
-                        textDecoration: 'none',
-                        '&:hover': {
-                          textDecoration: 'underline',
+                        color: "primary.main",
+                        textDecoration: "none",
+                        "&:hover": {
+                          textDecoration: "underline",
                         },
                       }}
                     >
@@ -364,9 +384,9 @@ export default function SignupPage() {
           <Typography
             variant="body2"
             sx={{
-              textAlign: 'center',
+              textAlign: "center",
               mt: 3,
-              color: 'text.disabled',
+              color: "text.disabled",
             }}
           >
             By signing up, you agree to our Terms of Service and Privacy Policy
