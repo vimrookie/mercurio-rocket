@@ -3,9 +3,12 @@
 import React from 'react';
 import { Box, Container, Typography, Button, Card, CardContent } from '@mui/material';
 import { RocketLaunch, WhatsApp, Email, Speed } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 import MercurioLogo from '../shared/MercurioLogo';
 
 const BlastOff: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
     <Box
       sx={{
@@ -56,9 +59,9 @@ const BlastOff: React.FC = () => {
                 fontWeight: 700,
               }}
             >
-              Ready to Launch Your
+              {t('cta.title')}
               <Box component="span" sx={{ color: 'primary.main', display: 'block' }}>
-                Business Into Orbit?
+                {t('cta.titleHighlight')}
               </Box>
             </Typography>
 
@@ -72,9 +75,7 @@ const BlastOff: React.FC = () => {
                 maxWidth: '600px',
               }}
             >
-              Join thousands of businesses already using Mercurio to automate their 
-              document processing. Start your free trial today and experience the 
-              power of rocket-fueled automation.
+              {t('cta.subtitle')}
             </Typography>
 
             <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap', mb: 6 }}>
@@ -99,7 +100,7 @@ const BlastOff: React.FC = () => {
                   },
                 }}
               >
-                Start Free Forever
+                {t('cta.startFree')}
               </Button>
 
               <Button
@@ -118,7 +119,7 @@ const BlastOff: React.FC = () => {
                   },
                 }}
               >
-                Try WhatsApp Demo
+                {t('cta.tryWhatsApp')}
               </Button>
             </Box>
 
@@ -129,10 +130,10 @@ const BlastOff: React.FC = () => {
                   variant="h4"
                   sx={{ color: 'primary.main', fontWeight: 700, mb: 1 }}
                 >
-                  30 sec
+                  {t('cta.setupTime')}
                 </Typography>
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  Setup Time
+                  {t('cta.setupTimeLabel')}
                 </Typography>
               </Box>
               <Box sx={{ flex: 1, minWidth: '120px' }}>
@@ -140,10 +141,10 @@ const BlastOff: React.FC = () => {
                   variant="h4"
                   sx={{ color: 'secondary.main', fontWeight: 700, mb: 1, fontSize: '1.5rem' }}
                 >
-                  No Credit Card
+                  {t('cta.noCreditCard')}
                 </Typography>
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  Required
+                  {t('cta.noCreditCardLabel')}
                 </Typography>
               </Box>
               <Box sx={{ flex: 1, minWidth: '100px' }}>
@@ -151,10 +152,10 @@ const BlastOff: React.FC = () => {
                   variant="h4"
                   sx={{ color: 'primary.main', fontWeight: 700, mb: 1 }}
                 >
-                  24/7
+                  {t('cta.support')}
                 </Typography>
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  Support
+                  {t('cta.supportLabel')}
                 </Typography>
               </Box>
             </Box>
@@ -177,10 +178,10 @@ const BlastOff: React.FC = () => {
                   <CardContent sx={{ textAlign: 'center', p: 3 }}>
                     <Speed sx={{ fontSize: 40, color: 'primary.main', mb: 2 }} />
                     <Typography variant="h6" sx={{ mb: 2, color: 'white' }}>
-                      Instant Demo
+                      {t('cta.instantDemo')}
                     </Typography>
                     <Typography variant="body2" sx={{ mb: 3, color: 'text.secondary' }}>
-                      See Mercurio in action with a live demo
+                      {t('cta.instantDemoDesc')}
                     </Typography>
                     <Button
                       variant="outlined"
@@ -190,11 +191,11 @@ const BlastOff: React.FC = () => {
                         color: 'primary.main',
                       }}
                     >
-                      Watch Now
+                      {t('cta.watchNow')}
                     </Button>
                   </CardContent>
                 </Card>
-              
+
               <Card
                   sx={{
                     background: 'rgba(35, 39, 51, 0.8)',
@@ -209,7 +210,7 @@ const BlastOff: React.FC = () => {
                   <CardContent sx={{ textAlign: 'center', p: 3 }}>
                     <Email sx={{ fontSize: 40, color: 'secondary.main', mb: 2 }} />
                     <Typography variant="h6" sx={{ mb: 2, color: 'white' }}>
-                      Get In Touch
+                      {t('cta.getInTouch')}
                     </Typography>
                     <Typography variant="body2" sx={{ mb: 3, color: 'text.secondary' }}>
                       hello@mercuriohub.io
@@ -222,7 +223,7 @@ const BlastOff: React.FC = () => {
                         color: 'secondary.main',
                       }}
                     >
-                      Contact Us
+                      {t('cta.contactUs')}
                     </Button>
                   </CardContent>
                 </Card>
@@ -241,9 +242,9 @@ const BlastOff: React.FC = () => {
               fontStyle: 'italic',
             }}
           >
-            Built with ❤️ using AWS serverless technology, modern React, and intelligent automation.
+            {t('cta.footerTagline')}
             <br />
-            Mercurio - Where documents become insights.
+            {t('cta.footerSubtitle')}
           </Typography>
         </Box>
       </Container>

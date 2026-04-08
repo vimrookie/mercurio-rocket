@@ -3,105 +3,120 @@
 import React from 'react';
 import { Box, Container, Typography, Card, CardContent, Button, List, ListItem, ListItemIcon, ListItemText, Chip } from '@mui/material';
 import { Check, RocketLaunch, Star } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 
-const plans = [
+interface PlanDefinition {
+  nameKey: string;
+  price: string;
+  periodKey: string;
+  descriptionKey: string;
+  featureKeys: string[];
+  buttonTextKey: string;
+  buttonVariant: 'outlined' | 'contained';
+  popular: boolean;
+  savingsKey: string | null;
+}
+
+const planDefinitions: PlanDefinition[] = [
   {
-    name: 'Free',
+    nameKey: 'pricing.free',
     price: '$0',
-    period: 'forever',
-    description: 'Perfect for testing and small projects',
-    features: [
-      '50 documents/month',
-      '2 team members',
-      '1 WhatsApp session',
-      'OCR processing',
-      'Google Sheets integration',
-      'Community support',
+    periodKey: 'pricing.freePeriod',
+    descriptionKey: 'pricing.freeDesc',
+    featureKeys: [
+      'pricing.freeFeature1',
+      'pricing.freeFeature2',
+      'pricing.freeFeature3',
+      'pricing.freeFeature4',
+      'pricing.freeFeature5',
+      'pricing.freeFeature6',
     ],
-    buttonText: 'Start Free',
-    buttonVariant: 'outlined' as const,
+    buttonTextKey: 'pricing.freeButton',
+    buttonVariant: 'outlined',
     popular: false,
-    savingsText: null,
+    savingsKey: null,
   },
   {
-    name: 'Starter',
+    nameKey: 'pricing.starter',
     price: '$15',
-    period: 'month',
-    description: 'For growing small businesses',
-    features: [
-      '100 documents/month',
-      '3 team members',
-      '1 WhatsApp session',
-      'Everything in Free',
-      'API access',
-      'Email support',
+    periodKey: 'pricing.starterPeriod',
+    descriptionKey: 'pricing.starterDesc',
+    featureKeys: [
+      'pricing.starterFeature1',
+      'pricing.starterFeature2',
+      'pricing.starterFeature3',
+      'pricing.starterFeature4',
+      'pricing.starterFeature5',
+      'pricing.starterFeature6',
     ],
-    buttonText: 'Get Starter',
-    buttonVariant: 'contained' as const,
+    buttonTextKey: 'pricing.starterButton',
+    buttonVariant: 'contained',
     popular: false,
-    savingsText: null,
+    savingsKey: null,
   },
   {
-    name: 'Growth',
+    nameKey: 'pricing.growth',
     price: '$49',
-    period: 'month',
-    description: 'Scale your operations with confidence',
-    features: [
-      '500 documents/month',
-      '10 team members',
-      '3 WhatsApp sessions',
-      'Everything in Starter',
-      'Advanced filtering',
-      'Data export',
-      'Priority support',
+    periodKey: 'pricing.growthPeriod',
+    descriptionKey: 'pricing.growthDesc',
+    featureKeys: [
+      'pricing.growthFeature1',
+      'pricing.growthFeature2',
+      'pricing.growthFeature3',
+      'pricing.growthFeature4',
+      'pricing.growthFeature5',
+      'pricing.growthFeature6',
+      'pricing.growthFeature7',
     ],
-    buttonText: 'Get Growth',
-    buttonVariant: 'contained' as const,
+    buttonTextKey: 'pricing.growthButton',
+    buttonVariant: 'contained',
     popular: true,
-    savingsText: '$10/month vs pay-as-you-go',
+    savingsKey: 'pricing.growthSavings',
   },
   {
-    name: 'Business',
+    nameKey: 'pricing.business',
     price: '$149',
-    period: 'month',
-    description: 'Enterprise-grade automation',
-    features: [
-      '2,000 documents/month',
-      '50 team members',
-      '10 WhatsApp sessions',
-      'Everything in Growth',
-      'Advanced analytics',
-      'Webhook integrations',
-      'Phone & email support',
+    periodKey: 'pricing.businessPeriod',
+    descriptionKey: 'pricing.businessDesc',
+    featureKeys: [
+      'pricing.businessFeature1',
+      'pricing.businessFeature2',
+      'pricing.businessFeature3',
+      'pricing.businessFeature4',
+      'pricing.businessFeature5',
+      'pricing.businessFeature6',
+      'pricing.businessFeature7',
     ],
-    buttonText: 'Get Business',
-    buttonVariant: 'contained' as const,
+    buttonTextKey: 'pricing.businessButton',
+    buttonVariant: 'contained',
     popular: false,
-    savingsText: '$50/month vs pay-as-you-go',
+    savingsKey: 'pricing.businessSavings',
   },
   {
-    name: 'Enterprise',
-    price: 'Custom',
-    period: 'contact us',
-    description: 'Tailored for large organizations',
-    features: [
-      'Unlimited documents',
-      'Unlimited team members',
-      'Unlimited WhatsApp sessions',
-      'Everything in Business',
-      'Dedicated infrastructure',
-      'Custom SLA',
-      'SSO integration',
-      '24/7 dedicated support',
+    nameKey: 'pricing.enterprise',
+    price: '',
+    periodKey: 'pricing.enterprisePeriod',
+    descriptionKey: 'pricing.enterpriseDesc',
+    featureKeys: [
+      'pricing.enterpriseFeature1',
+      'pricing.enterpriseFeature2',
+      'pricing.enterpriseFeature3',
+      'pricing.enterpriseFeature4',
+      'pricing.enterpriseFeature5',
+      'pricing.enterpriseFeature6',
+      'pricing.enterpriseFeature7',
+      'pricing.enterpriseFeature8',
     ],
-    buttonText: 'Contact Sales',
-    buttonVariant: 'contained' as const,
+    buttonTextKey: 'pricing.enterpriseButton',
+    buttonVariant: 'contained',
     popular: false,
-    savingsText: null,
+    savingsKey: null,
   },
 ];
 
 const FuelPricing: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
     <Box
       sx={{
@@ -124,7 +139,7 @@ const FuelPricing: React.FC = () => {
               fontWeight: 700,
             }}
           >
-            Choose Your Fuel Plan
+            {t('pricing.sectionTitle')}
           </Typography>
           <Typography
             variant="body1"
@@ -136,8 +151,7 @@ const FuelPricing: React.FC = () => {
               lineHeight: 1.6,
             }}
           >
-            Power your business with the right amount of rocket fuel. 
-            Start free and scale as you grow.
+            {t('pricing.sectionSubtitle')}
           </Typography>
         </Box>
 
@@ -155,155 +169,160 @@ const FuelPricing: React.FC = () => {
             mb: 8,
             maxWidth: '1400px',
             mx: 'auto',
-            pt: 5, // Increased padding top to accommodate the chip
+            pt: 5,
           }}
         >
-          {plans.map((plan, index) => (
-            <Box key={index} sx={{ position: 'relative' }}>
-              {plan.popular && (
-                <Chip
-                  label="Most Popular"
-                  icon={<Star />}
+          {planDefinitions.map((plan, index) => {
+            const isEnterprise = plan.nameKey === 'pricing.enterprise';
+            const displayPrice = isEnterprise ? t('pricing.enterprisePrice') : plan.price;
+
+            return (
+              <Box key={index} sx={{ position: 'relative' }}>
+                {plan.popular && (
+                  <Chip
+                    label={t('pricing.mostPopular')}
+                    icon={<Star />}
+                    sx={{
+                      position: 'absolute',
+                      top: -12,
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      background: 'linear-gradient(135deg, #BDBDBD 0%, #9E9E9E 100%)',
+                      color: '#000',
+                      fontWeight: 700,
+                      zIndex: 20,
+                      px: 2,
+                      py: 0.5,
+                      fontSize: '0.85rem',
+                      height: 'auto',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                    }}
+                  />
+                )}
+                <Card
                   sx={{
-                    position: 'absolute',
-                    top: -12,
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    background: 'linear-gradient(135deg, #BDBDBD 0%, #9E9E9E 100%)',
-                    color: '#000',
-                    fontWeight: 700,
-                    zIndex: 20,
-                    px: 2,
-                    py: 0.5,
-                    fontSize: '0.85rem',
-                    height: 'auto',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    background: plan.popular
+                      ? 'linear-gradient(135deg, rgba(189, 189, 189, 0.1) 0%, rgba(35, 39, 51, 0.9) 100%)'
+                      : 'rgba(35, 39, 51, 0.6)',
+                    backdropFilter: 'blur(10px)',
+                    border: plan.popular
+                      ? '2px solid #BDBDBD'
+                      : '1px solid rgba(255, 255, 255, 0.1)',
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      transform: 'translateY(-8px)',
+                      boxShadow: plan.popular
+                        ? '0 20px 40px rgba(189, 189, 189, 0.3)'
+                        : '0 20px 40px rgba(0,0,0,0.2)',
+                    },
                   }}
-                />
-              )}
-              <Card
-                sx={{
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  background: plan.popular
-                    ? 'linear-gradient(135deg, rgba(189, 189, 189, 0.1) 0%, rgba(35, 39, 51, 0.9) 100%)'
-                    : 'rgba(35, 39, 51, 0.6)',
-                  backdropFilter: 'blur(10px)',
-                  border: plan.popular
-                    ? '2px solid #BDBDBD'
-                    : '1px solid rgba(255, 255, 255, 0.1)',
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    transform: 'translateY(-8px)',
-                    boxShadow: plan.popular
-                      ? '0 20px 40px rgba(189, 189, 189, 0.3)'
-                      : '0 20px 40px rgba(0,0,0,0.2)',
-                  },
-                }}
-              >
+                >
 
-                <CardContent sx={{ p: 4, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                  <Typography
-                    variant="h5"
-                    sx={{
-                      mb: 1,
-                      color: 'white',
-                      fontWeight: 600,
-                    }}
-                  >
-                    {plan.name}
-                  </Typography>
+                  <CardContent sx={{ p: 4, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                    <Typography
+                      variant="h5"
+                      sx={{
+                        mb: 1,
+                        color: 'white',
+                        fontWeight: 600,
+                      }}
+                    >
+                      {t(plan.nameKey)}
+                    </Typography>
 
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      mb: 3,
-                      color: 'text.secondary',
-                      minHeight: '40px',
-                    }}
-                  >
-                    {plan.description}
-                  </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        mb: 3,
+                        color: 'text.secondary',
+                        minHeight: '40px',
+                      }}
+                    >
+                      {t(plan.descriptionKey)}
+                    </Typography>
 
-                  <Box sx={{ mb: 4 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'baseline', mb: 1 }}>
-                      <Typography
-                        variant="h3"
-                        sx={{
-                          color: plan.popular ? 'primary.main' : 'white',
-                          fontWeight: 700,
-                        }}
-                      >
-                        {plan.price}
-                      </Typography>
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          ml: 1,
-                          color: 'text.secondary',
-                        }}
-                      >
-                        /{plan.period}
-                      </Typography>
-                    </Box>
-                  </Box>
-
-                  <List sx={{ flexGrow: 1, py: 0 }}>
-                    {plan.features.map((feature, featureIndex) => (
-                      <ListItem key={featureIndex} sx={{ py: 0.5, px: 0 }}>
-                        <ListItemIcon sx={{ minWidth: 36 }}>
-                          <Check sx={{ color: 'primary.main', fontSize: 20 }} />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={feature}
-                          primaryTypographyProps={{
-                            variant: 'body2',
+                    <Box sx={{ mb: 4 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'baseline', mb: 1 }}>
+                        <Typography
+                          variant="h3"
+                          sx={{
+                            color: plan.popular ? 'primary.main' : 'white',
+                            fontWeight: 700,
+                          }}
+                        >
+                          {displayPrice}
+                        </Typography>
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            ml: 1,
                             color: 'text.secondary',
                           }}
-                        />
-                      </ListItem>
-                    ))}
-                  </List>
+                        >
+                          /{t(plan.periodKey)}
+                        </Typography>
+                      </Box>
+                    </Box>
 
-                  <Button
-                    variant={plan.buttonVariant}
-                    size="large"
-                    fullWidth
-                    startIcon={<RocketLaunch />}
-                    component="a"
-                    href={plan.name === 'Free' ? '/signup' : undefined}
-                    sx={{
-                      mt: 4,
-                      py: 1.5,
-                      textDecoration: 'none',
-                      ...(plan.buttonVariant === 'contained' && {
-                        background: plan.popular
-                          ? 'linear-gradient(135deg, #BDBDBD 0%, #9E9E9E 100%)'
-                          : 'linear-gradient(135deg, #9E9E9E 0%, #757575 100%)',
-                        color: '#000',
-                        fontWeight: 700,
-                        '&:hover': {
-                          background: 'linear-gradient(135deg, #E0E0E0 0%, #BDBDBD 100%)',
-                          transform: 'translateY(-1px)',
-                        },
-                      }),
-                      ...(plan.buttonVariant === 'outlined' && {
-                        borderColor: 'primary.main',
-                        color: 'primary.main',
-                        '&:hover': {
-                          borderColor: 'primary.light',
-                          backgroundColor: 'rgba(189, 189, 189, 0.08)',
-                        },
-                      }),
-                    }}
-                  >
-                    {plan.buttonText}
-                  </Button>
-                </CardContent>
-              </Card>
-            </Box>
-          ))}
+                    <List sx={{ flexGrow: 1, py: 0 }}>
+                      {plan.featureKeys.map((featureKey, featureIndex) => (
+                        <ListItem key={featureIndex} sx={{ py: 0.5, px: 0 }}>
+                          <ListItemIcon sx={{ minWidth: 36 }}>
+                            <Check sx={{ color: 'primary.main', fontSize: 20 }} />
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={t(featureKey)}
+                            primaryTypographyProps={{
+                              variant: 'body2',
+                              color: 'text.secondary',
+                            }}
+                          />
+                        </ListItem>
+                      ))}
+                    </List>
+
+                    <Button
+                      variant={plan.buttonVariant}
+                      size="large"
+                      fullWidth
+                      startIcon={<RocketLaunch />}
+                      component="a"
+                      href={plan.nameKey === 'pricing.free' ? '/signup' : undefined}
+                      sx={{
+                        mt: 4,
+                        py: 1.5,
+                        textDecoration: 'none',
+                        ...(plan.buttonVariant === 'contained' && {
+                          background: plan.popular
+                            ? 'linear-gradient(135deg, #BDBDBD 0%, #9E9E9E 100%)'
+                            : 'linear-gradient(135deg, #9E9E9E 0%, #757575 100%)',
+                          color: '#000',
+                          fontWeight: 700,
+                          '&:hover': {
+                            background: 'linear-gradient(135deg, #E0E0E0 0%, #BDBDBD 100%)',
+                            transform: 'translateY(-1px)',
+                          },
+                        }),
+                        ...(plan.buttonVariant === 'outlined' && {
+                          borderColor: 'primary.main',
+                          color: 'primary.main',
+                          '&:hover': {
+                            borderColor: 'primary.light',
+                            backgroundColor: 'rgba(189, 189, 189, 0.08)',
+                          },
+                        }),
+                      }}
+                    >
+                      {t(plan.buttonTextKey)}
+                    </Button>
+                  </CardContent>
+                </Card>
+              </Box>
+            );
+          })}
         </Box>
 
         {/* Bottom CTA */}
@@ -324,7 +343,7 @@ const FuelPricing: React.FC = () => {
               fontWeight: 600,
             }}
           >
-            Need a Custom Solution?
+            {t('pricing.customSolutionTitle')}
           </Typography>
           <Typography
             variant="body1"
@@ -335,8 +354,7 @@ const FuelPricing: React.FC = () => {
               mx: 'auto',
             }}
           >
-            Contact our team for enterprise-grade features, custom integrations, 
-            and volume pricing for large organizations.
+            {t('pricing.customSolutionDesc')}
           </Typography>
           <Button
             variant="outlined"
@@ -352,7 +370,7 @@ const FuelPricing: React.FC = () => {
               },
             }}
           >
-            Contact Sales
+            {t('pricing.contactSales')}
           </Button>
         </Box>
       </Container>

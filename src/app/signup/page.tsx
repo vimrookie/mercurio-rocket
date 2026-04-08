@@ -24,12 +24,16 @@ import {
   VisibilityOff,
   ArrowBack,
 } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
+import "../../i18n";
 import theme from "@/lib/theme";
 import MercurioLogo from "@/components/shared/MercurioLogo";
+import LanguageSwitcher from "@/components/shared/LanguageSwitcher";
 import { signupOrganization, ApiError } from "@/lib/api";
 
 export default function SignupPage() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -48,7 +52,7 @@ export default function SignupPage() {
   const handleChange =
     (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
       setFormData((prev) => ({ ...prev, [field]: event.target.value }));
-      setError(null); // Clear error when user types
+      setError(null);
     };
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -57,42 +61,38 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
-      // Client-side validation
       if (formData.password !== formData.confirmPassword) {
-        throw new Error("Passwords do not match");
+        throw new Error(t("signup.passwordsNoMatch"));
       }
 
-      // Validate password requirements
       const passwordErrors: string[] = [];
 
       if (formData.password.length < 8) {
-        passwordErrors.push("at least 8 characters");
+        passwordErrors.push(t("signup.passwordMinLength"));
       }
       if (!/[A-Z]/.test(formData.password)) {
-        passwordErrors.push("one uppercase letter");
+        passwordErrors.push(t("signup.passwordUppercase"));
       }
       if (!/[a-z]/.test(formData.password)) {
-        passwordErrors.push("one lowercase letter");
+        passwordErrors.push(t("signup.passwordLowercase"));
       }
       if (!/\d/.test(formData.password)) {
-        passwordErrors.push("one number");
+        passwordErrors.push(t("signup.passwordNumber"));
       }
       if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(formData.password)) {
-        passwordErrors.push("one special character");
+        passwordErrors.push(t("signup.passwordSpecial"));
       }
 
       if (passwordErrors.length > 0) {
-        throw new Error(`Password must contain ${passwordErrors.join(", ")}`);
+        throw new Error(
+          `${t("signup.passwordRequirement")} ${passwordErrors.join(", ")}`
+        );
       }
 
-      // Call API
       await signupOrganization(formData);
 
-      // Success!
       setSuccess(true);
 
-      // Redirect to login after 3 seconds
-      // Use environment variable for login URL (local vs production)
       const loginUrl = process.env.NEXT_PUBLIC_APP_URL
         ? `${process.env.NEXT_PUBLIC_APP_URL}/login?logout=true`
         : "https://app.mercuriohub.io/login?logout=true";
@@ -103,7 +103,6 @@ export default function SignupPage() {
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.details && err.details.length > 0) {
-          // Show password validation errors
           setError(err.details.map((d) => d.message).join(". "));
         } else {
           setError(err.error);
@@ -111,7 +110,7 @@ export default function SignupPage() {
       } else if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError("An unexpected error occurred. Please try again.");
+        setError(t("signup.unexpectedError"));
       }
     } finally {
       setLoading(false);
@@ -122,6 +121,7 @@ export default function SignupPage() {
     return (
       <ThemeProvider theme={theme}>
         <CssBaseline />
+        <LanguageSwitcher />
         <Box
           sx={{
             minHeight: "100vh",
@@ -147,11 +147,10 @@ export default function SignupPage() {
                 variant="h4"
                 sx={{ mt: 3, mb: 2, color: "white", fontWeight: 700 }}
               >
-                Welcome to Mercurio!
+                {t("signup.welcomeTitle")}
               </Typography>
               <Alert severity="success" sx={{ mb: 3 }}>
-                Your account has been created successfully! Redirecting you to
-                login...
+                {t("signup.successMessage")}
               </Alert>
               <CircularProgress sx={{ color: "primary.main" }} />
             </CardContent>
@@ -164,6 +163,7 @@ export default function SignupPage() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <LanguageSwitcher />
       <Box
         sx={{
           minHeight: "100vh",
@@ -190,7 +190,7 @@ export default function SignupPage() {
             },
           }}
         >
-          Back to Home
+          {t("signup.backToHome")}
         </Button>
 
         <Container maxWidth="sm">
@@ -214,10 +214,10 @@ export default function SignupPage() {
                     fontWeight: 700,
                   }}
                 >
-                  Start Free Forever
+                  {t("signup.title")}
                 </Typography>
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  Create your organization and start processing documents
+                  {t("signup.subtitle")}
                 </Typography>
               </Box>
 
@@ -232,7 +232,7 @@ export default function SignupPage() {
               <form onSubmit={handleSubmit}>
                 <TextField
                   fullWidth
-                  label="Organization Name"
+                  label={t("signup.organizationName")}
                   value={formData.organizationName}
                   onChange={handleChange("organizationName")}
                   required
@@ -243,7 +243,7 @@ export default function SignupPage() {
                 <Box sx={{ display: "flex", gap: 2, mb: 3 }}>
                   <TextField
                     fullWidth
-                    label="First Name"
+                    label={t("signup.firstName")}
                     value={formData.firstName}
                     onChange={handleChange("firstName")}
                     required
@@ -251,7 +251,7 @@ export default function SignupPage() {
                   />
                   <TextField
                     fullWidth
-                    label="Last Name"
+                    label={t("signup.lastName")}
                     value={formData.lastName}
                     onChange={handleChange("lastName")}
                     required
@@ -261,7 +261,7 @@ export default function SignupPage() {
 
                 <TextField
                   fullWidth
-                  label="Email"
+                  label={t("signup.email")}
                   type="email"
                   value={formData.email}
                   onChange={handleChange("email")}
@@ -272,7 +272,7 @@ export default function SignupPage() {
 
                 <TextField
                   fullWidth
-                  label="Password"
+                  label={t("signup.password")}
                   type={showPassword ? "text" : "password"}
                   value={formData.password}
                   onChange={handleChange("password")}
@@ -292,12 +292,12 @@ export default function SignupPage() {
                       </InputAdornment>
                     ),
                   }}
-                  helperText="Must contain: 8+ characters, uppercase, lowercase, number, and special character (!@#$%...)"
+                  helperText={t("signup.passwordHelp")}
                 />
 
                 <TextField
                   fullWidth
-                  label="Confirm Password"
+                  label={t("signup.confirmPassword")}
                   type={showConfirmPassword ? "text" : "password"}
                   value={formData.confirmPassword}
                   onChange={handleChange("confirmPassword")}
@@ -351,13 +351,15 @@ export default function SignupPage() {
                     },
                   }}
                 >
-                  {loading ? "Creating Account..." : "Create Account"}
+                  {loading
+                    ? t("signup.creatingAccount")
+                    : t("signup.createAccount")}
                 </Button>
 
                 {/* Login Link */}
                 <Box sx={{ textAlign: "center" }}>
                   <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                    Already have an account?{" "}
+                    {t("signup.alreadyHaveAccount")}{" "}
                     <Link
                       href={
                         process.env.NEXT_PUBLIC_APP_URL
@@ -372,7 +374,7 @@ export default function SignupPage() {
                         },
                       }}
                     >
-                      Sign in
+                      {t("signup.signIn")}
                     </Link>
                   </Typography>
                 </Box>
@@ -389,7 +391,7 @@ export default function SignupPage() {
               color: "text.disabled",
             }}
           >
-            By signing up, you agree to our Terms of Service and Privacy Policy
+            {t("signup.termsAgreement")}
           </Typography>
         </Container>
       </Box>

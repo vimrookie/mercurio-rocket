@@ -8,25 +8,25 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Mercurio - Launch Your Business Into Automated Success",
-  description: "Transform your financial document processing with rocket-powered OCR, seamless WhatsApp integration, and intelligent automation. 90% reduction in manual work.",
-  keywords: "document processing, OCR, automation, WhatsApp integration, financial documents, receipt processing, business automation",
+  title: "Mercurio - Lanza tu Negocio Hacia el Exito Automatizado",
+  description: "Transforma el procesamiento de tus documentos financieros con OCR potenciado por IA, integracion con WhatsApp y automatizacion inteligente. 90% de reduccion en trabajo manual.",
+  keywords: "procesamiento de documentos, OCR, automatizacion, integracion WhatsApp, documentos financieros, procesamiento de recibos, automatizacion empresarial, Latinoamerica",
   authors: [{ name: "Mercurio Team" }],
   creator: "Mercurio",
   publisher: "Mercurio",
   robots: "index, follow",
   openGraph: {
     type: "website",
-    locale: "en_US",
+    locale: "es_419",
     url: "https://mercuriohub.io",
-    title: "Mercurio - Launch Your Business Into Automated Success",
-    description: "Transform your financial document processing with rocket-powered OCR and intelligent automation.",
+    title: "Mercurio - Lanza tu Negocio Hacia el Exito Automatizado",
+    description: "Transforma el procesamiento de tus documentos financieros con OCR potenciado por IA y automatizacion inteligente.",
     siteName: "Mercurio",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mercurio - Launch Your Business Into Automated Success",
-    description: "Transform your financial document processing with rocket-powered OCR and intelligent automation.",
+    title: "Mercurio - Lanza tu Negocio Hacia el Exito Automatizado",
+    description: "Transforma el procesamiento de tus documentos financieros con OCR potenciado por IA y automatizacion inteligente.",
   },
 };
 
@@ -42,7 +42,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body
         className={`${inter.variable} antialiased`}
         style={{

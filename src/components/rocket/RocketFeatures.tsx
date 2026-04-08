@@ -2,62 +2,84 @@
 
 import React from 'react';
 import { Box, Container, Typography, Card, CardContent } from '@mui/material';
-import { 
-  Psychology, 
-  WhatsApp, 
-  TableChart, 
-  CloudQueue, 
-  Security, 
-  Group
+import {
+  Psychology,
+  WhatsApp,
+  TableChart,
+  CloudQueue,
+  Security,
+  Group,
+  SmartToy
 } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 
-const features = [
+interface FeatureItem {
+  icon: React.ReactElement;
+  titleKey: string;
+  descriptionKey: string;
+  color: string;
+}
+
+const featureDefinitions: FeatureItem[] = [
   {
     icon: <Psychology />,
-    title: 'Intelligent OCR Engine',
-    description: 'Advanced AI processes BCP, Yape, and custom receipts with 99%+ accuracy. Automatic classification and data extraction.',
+    titleKey: 'features.intelligentOcr',
+    descriptionKey: 'features.intelligentOcrDesc',
     color: '#BDBDBD',
   },
   {
     icon: <WhatsApp />,
-    title: 'WhatsApp Integration',
-    description: 'Submit documents directly via WhatsApp. Real-time processing with instant notifications and status updates.',
+    titleKey: 'features.whatsappIntegration',
+    descriptionKey: 'features.whatsappIntegrationDesc',
     color: '#00bcd4',
   },
   {
     icon: <TableChart />,
-    title: 'Google Sheets Sync',
-    description: 'Automatic export to Google Sheets. Real-time data synchronization for seamless accounting workflows.',
+    titleKey: 'features.googleSheetsSync',
+    descriptionKey: 'features.googleSheetsSyncDesc',
     color: '#4CAF50',
   },
   {
     icon: <CloudQueue />,
-    title: 'AWS Serverless',
-    description: 'Scalable cloud infrastructure. Auto-scaling Lambda functions with 99.9% uptime guarantee.',
+    titleKey: 'features.awsServerless',
+    descriptionKey: 'features.awsServerlessDesc',
     color: '#FF9500',
   },
   {
     icon: <Security />,
-    title: 'Enterprise Security',
-    description: 'Multi-tenant architecture with complete data isolation. SOC 2 compliant with end-to-end encryption.',
+    titleKey: 'features.enterpriseSecurity',
+    descriptionKey: 'features.enterpriseSecurityDesc',
     color: '#F44336',
   },
   {
     icon: <Group />,
-    title: 'Team Management',
-    description: 'Role-based access control. Organization management with user permissions and audit trails.',
+    titleKey: 'features.teamManagement',
+    descriptionKey: 'features.teamManagementDesc',
     color: '#9C27B0',
+  },
+  {
+    icon: <SmartToy />,
+    titleKey: 'features.customParsers',
+    descriptionKey: 'features.customParsersDesc',
+    color: '#2196F3',
   },
 ];
 
-const stats = [
-  { number: '90%', label: 'Reduction in Manual Work' },
-  { number: '50%', label: 'Faster Processing' },
-  { number: '99.9%', label: 'System Uptime' },
-  { number: '1000+', label: 'Documents Processed Daily' },
+interface StatItem {
+  number: string;
+  labelKey: string;
+}
+
+const statDefinitions: StatItem[] = [
+  { number: '90%', labelKey: 'features.statReduction' },
+  { number: '50%', labelKey: 'features.statFaster' },
+  { number: '99.9%', labelKey: 'features.statUptime' },
+  { number: '1000+', labelKey: 'features.statDocuments' },
 ];
 
 const RocketFeatures: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
     <Box
       sx={{
@@ -80,7 +102,7 @@ const RocketFeatures: React.FC = () => {
               fontWeight: 700,
             }}
           >
-            Rocket-Powered Features
+            {t('features.sectionTitle')}
           </Typography>
           <Typography
             variant="body1"
@@ -92,14 +114,13 @@ const RocketFeatures: React.FC = () => {
               lineHeight: 1.6,
             }}
           >
-            Everything you need to automate your document processing workflow.
-            Built with modern technology for maximum performance and reliability.
+            {t('features.sectionSubtitle')}
           </Typography>
         </Box>
 
         {/* Features Grid */}
         <Box sx={{ display: 'flex', gap: 4, flexWrap: 'wrap', mb: 10 }}>
-          {features.map((feature, index) => (
+          {featureDefinitions.map((feature, index) => (
             <Box key={index} sx={{ flex: { xs: '1 1 100%', md: '1 1 30%' }, minWidth: '300px' }}>
               <Card
                 sx={{
@@ -126,7 +147,7 @@ const RocketFeatures: React.FC = () => {
                       mb: 3,
                     }}
                   >
-                    {React.cloneElement(feature.icon, { fontSize: 'large' })}
+                    {React.cloneElement(feature.icon as React.ReactElement<Record<string, unknown>>, { fontSize: 'large' })}
                   </Box>
                   <Typography
                     variant="h6"
@@ -136,7 +157,7 @@ const RocketFeatures: React.FC = () => {
                       fontWeight: 600,
                     }}
                   >
-                    {feature.title}
+                    {t(feature.titleKey)}
                   </Typography>
                   <Typography
                     variant="body2"
@@ -145,7 +166,7 @@ const RocketFeatures: React.FC = () => {
                       lineHeight: 1.6,
                     }}
                   >
-                    {feature.description}
+                    {t(feature.descriptionKey)}
                   </Typography>
                 </CardContent>
               </Card>
@@ -171,10 +192,10 @@ const RocketFeatures: React.FC = () => {
               fontWeight: 600,
             }}
           >
-            Trusted by Businesses Worldwide
+            {t('features.statsTitle')}
           </Typography>
           <Box sx={{ display: 'flex', gap: 4, flexWrap: 'wrap', justifyContent: 'center' }}>
-            {stats.map((stat, index) => (
+            {statDefinitions.map((stat, index) => (
               <Box key={index} sx={{ flex: { xs: '1 1 45%', md: '1 1 22%' }, minWidth: '150px', textAlign: 'center' }}>
                 <Typography
                   variant="h3"
@@ -193,7 +214,7 @@ const RocketFeatures: React.FC = () => {
                     fontWeight: 500,
                   }}
                 >
-                  {stat.label}
+                  {t(stat.labelKey)}
                 </Typography>
               </Box>
             ))}

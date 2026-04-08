@@ -3,9 +3,12 @@
 import React from 'react';
 import { Box, Container, Typography, Button, Card, CardContent } from '@mui/material';
 import { RocketLaunch, AutoAwesome, Speed, Security } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 import MercurioLogo from '../shared/MercurioLogo';
 
 const LaunchPad: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
     <Box
       sx={{
@@ -50,7 +53,7 @@ const LaunchPad: React.FC = () => {
             <Box sx={{ mb: 4 }}>
               <MercurioLogo size={80} animated />
             </Box>
-            
+
             <Typography
               variant="h1"
               sx={{
@@ -62,9 +65,9 @@ const LaunchPad: React.FC = () => {
                 fontWeight: 700,
               }}
             >
-              Launch Your Business Into 
+              {t('hero.title')}{' '}
               <Box component="span" sx={{ color: 'primary.main', display: 'block' }}>
-                Automated Success
+                {t('hero.titleHighlight')}
               </Box>
             </Typography>
 
@@ -78,9 +81,8 @@ const LaunchPad: React.FC = () => {
                 maxWidth: '500px',
               }}
             >
-              Transform your financial document processing with rocket-powered OCR, 
-              seamless WhatsApp integration, and intelligent automation. 
-              <strong>Join 1000+ businesses</strong> already in orbit.
+              {t('hero.subtitle')}{' '}
+              <strong>{t('hero.subtitleHighlight')}</strong>
             </Typography>
 
             <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
@@ -103,7 +105,7 @@ const LaunchPad: React.FC = () => {
                   },
                 }}
               >
-                Start Free Forever
+                {t('hero.startFree')}
               </Button>
               <Button
                 variant="outlined"
@@ -120,7 +122,7 @@ const LaunchPad: React.FC = () => {
                   },
                 }}
               >
-                Watch Demo
+                {t('hero.watchDemo')}
               </Button>
             </Box>
           </Box>
@@ -140,10 +142,10 @@ const LaunchPad: React.FC = () => {
                   <CardContent sx={{ textAlign: 'center', p: 3 }}>
                     <AutoAwesome sx={{ fontSize: 40, color: 'primary.main', mb: 2 }} />
                     <Typography variant="h6" sx={{ mb: 1, color: 'white' }}>
-                      99% OCR Accuracy
+                      {t('hero.ocrAccuracy')}
                     </Typography>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      Advanced AI document processing
+                      {t('hero.ocrAccuracyDesc')}
                     </Typography>
                   </CardContent>
                 </Card>
@@ -160,10 +162,10 @@ const LaunchPad: React.FC = () => {
                   <CardContent sx={{ textAlign: 'center', p: 3 }}>
                     <Speed sx={{ fontSize: 40, color: 'secondary.main', mb: 2 }} />
                     <Typography variant="h6" sx={{ mb: 1, color: 'white' }}>
-                      Real-time Processing
+                      {t('hero.realTimeProcessing')}
                     </Typography>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      Instant WhatsApp integration
+                      {t('hero.realTimeProcessingDesc')}
                     </Typography>
                   </CardContent>
                 </Card>
@@ -179,10 +181,10 @@ const LaunchPad: React.FC = () => {
                   <CardContent sx={{ textAlign: 'center', p: 3 }}>
                     <Security sx={{ fontSize: 40, color: 'primary.main', mb: 2 }} />
                     <Typography variant="h6" sx={{ mb: 1, color: 'white' }}>
-                      Enterprise Security
+                      {t('hero.enterpriseSecurity')}
                     </Typography>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      SOC 2 compliant with end-to-end encryption
+                      {t('hero.enterpriseSecurityDesc')}
                     </Typography>
                   </CardContent>
                 </Card>
