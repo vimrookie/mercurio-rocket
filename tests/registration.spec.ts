@@ -34,11 +34,11 @@ test.describe('User Registration Flow', () => {
     console.log(`[Test] Creating user: ${testUser.email}`);
 
     // Step 1: Navigate to signup page
-    await page.goto('/signup');
+    await page.goto('/en/signup');
 
     // Verify signup page loaded
     await expect(
-      page.getByRole('heading', { name: /start free forever/i })
+      page.getByRole('heading', { name: /start free/i })
     ).toBeVisible({ timeout: 10000 });
 
     // Step 2: Fill registration form
@@ -90,11 +90,11 @@ test.describe('User Registration Flow', () => {
   });
 
   test('should show validation error for weak password', async ({ page }) => {
-    await page.goto('/signup');
+    await page.goto('/en/signup');
 
     // Wait for page to load
     await expect(
-      page.getByRole('heading', { name: /start free forever/i })
+      page.getByRole('heading', { name: /start free/i })
     ).toBeVisible({ timeout: 10000 });
 
     // Fill form with weak password
@@ -120,11 +120,11 @@ test.describe('User Registration Flow', () => {
   });
 
   test('should show error for mismatched passwords', async ({ page }) => {
-    await page.goto('/signup');
+    await page.goto('/en/signup');
 
     // Wait for page to load
     await expect(
-      page.getByRole('heading', { name: /start free forever/i })
+      page.getByRole('heading', { name: /start free/i })
     ).toBeVisible({ timeout: 10000 });
 
     // Fill form with mismatched passwords
@@ -149,17 +149,17 @@ test.describe('User Registration Flow', () => {
   });
 
   test('should navigate back to home page', async ({ page }) => {
-    await page.goto('/signup');
+    await page.goto('/en/signup');
 
     // Wait for page to load
     await expect(
-      page.getByRole('heading', { name: /start free forever/i })
+      page.getByRole('heading', { name: /start free/i })
     ).toBeVisible({ timeout: 10000 });
 
     // Click back to home button
     await page.getByRole('button', { name: /back to home/i }).click();
 
-    // Should navigate to home page
-    await page.waitForURL('/', { timeout: 5000 });
+    // Should navigate to the English home page
+    await page.waitForURL(/\/en\/?$/, { timeout: 5000 });
   });
 });

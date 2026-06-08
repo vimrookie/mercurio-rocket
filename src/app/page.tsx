@@ -1,29 +1,41 @@
 'use client';
 
-import React from 'react';
-import { ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import { Box } from '@mui/material';
+import React, { useEffect } from 'react';
+import { defaultLocale } from '@/i18n/config';
 
-import '../i18n';
-import theme from '@/lib/theme';
-import LaunchPad from '@/components/rocket/LaunchPad';
-import RocketFeatures from '@/components/rocket/RocketFeatures';
-import FuelPricing from '@/components/rocket/FuelPricing';
-import BlastOff from '@/components/rocket/BlastOff';
-import LanguageSwitcher from '@/components/shared/LanguageSwitcher';
+/**
+ * Root entry. The site is locale-routed (`/es`, `/en`); the bare root only
+ * forwards to the best locale. This static `/index.html` also doubles as the
+ * CloudFront 404/403 fallback (see infrastructure.yml).
+ */
+export default function RootRedirect() {
+  useEffect(() => {
+    const prefersEnglish =
+      typeof navigator !== 'undefined' && navigator.language?.toLowerCase().startsWith('en');
+    window.location.replace(prefersEnglish ? '/en/' : `/${defaultLocale}/`);
+  }, []);
 
-export default function Home() {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <LanguageSwitcher />
-      <Box sx={{ backgroundColor: 'background.default' }}>
-        <LaunchPad />
-        <RocketFeatures />
-        <FuelPricing />
-        <BlastOff />
-      </Box>
-    </ThemeProvider>
+    <>
+      <noscript>
+        {/* No-JS fallback: forward to the default locale. */}
+        <meta httpEquiv="refresh" content={`0; url=/${defaultLocale}/`} />
+      </noscript>
+      <div
+        style={{
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: '#181C23',
+          color: 'rgba(255,255,255,0.7)',
+          fontFamily: 'var(--font-inter), system-ui, sans-serif',
+        }}
+      >
+        <a href={`/${defaultLocale}/`} style={{ color: '#BDBDBD' }}>
+          Mercurio →
+        </a>
+      </div>
+    </>
   );
 }

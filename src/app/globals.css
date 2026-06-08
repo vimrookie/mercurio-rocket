@@ -1,26 +1,25 @@
-@import "tailwindcss";
+/* Brand baseline — aligned with the dark MUI theme (see src/lib/theme.ts).
+   MUI + Emotion own component styling; this file only sets document defaults. */
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #181c23;
+  color: #ffffff;
+  font-family: var(--font-inter), system-ui, Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Offset anchor scrolling for the sticky navbar. */
+section[id] {
+  scroll-margin-top: 80px;
 }

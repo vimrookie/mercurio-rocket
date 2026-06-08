@@ -27,7 +27,7 @@ const theme = createTheme({
         borderRadius: 12,
     },
     typography: {
-        fontFamily: 'system-ui, Avenir, Helvetica, Arial, sans-serif',
+        fontFamily: 'var(--font-inter), system-ui, Avenir, Helvetica, Arial, sans-serif',
         h1: {
             fontWeight: 700,
             fontSize: '3.5rem',
