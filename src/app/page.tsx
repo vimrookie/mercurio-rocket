@@ -4,15 +4,14 @@ import React, { useEffect } from 'react';
 import { defaultLocale } from '@/i18n/config';
 
 /**
- * Root entry. The site is locale-routed (`/es`, `/en`); the bare root only
- * forwards to the best locale. This static `/index.html` also doubles as the
+ * Root entry. The site is locale-routed (`/es`, `/en`); the bare root forwards
+ * to the default locale (Spanish — the primary market). Visitors can switch to
+ * English from the navbar. This static `/index.html` also doubles as the
  * CloudFront 404/403 fallback (see infrastructure.yml).
  */
 export default function RootRedirect() {
   useEffect(() => {
-    const prefersEnglish =
-      typeof navigator !== 'undefined' && navigator.language?.toLowerCase().startsWith('en');
-    window.location.replace(prefersEnglish ? '/en/' : `/${defaultLocale}/`);
+    window.location.replace(`/${defaultLocale}/`);
   }, []);
 
   return (

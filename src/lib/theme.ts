@@ -57,6 +57,7 @@ const theme = createTheme({
                     fontWeight: 600,
                     padding: '12px 32px',
                     fontSize: '1rem',
+                    whiteSpace: 'nowrap', // keep button labels on one line (no navbar growth)
                 },
                 contained: {
                     boxShadow: '0 4px 14px 0 rgba(189, 189, 189, 0.3)',
