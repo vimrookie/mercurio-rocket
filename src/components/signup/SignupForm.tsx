@@ -73,9 +73,11 @@ const SignupForm: React.FC = () => {
       await signupOrganization(formData);
       setSuccess(true);
 
-      const loginUrl = appUrl('/login?logout=true');
+      // Account is created but unverified — send the user to the verification page
+      // on the app (app.mercuriohub.io) with their email prefilled.
+      const verifyUrl = appUrl(`/verify-email?email=${encodeURIComponent(formData.email)}`);
       setTimeout(() => {
-        window.location.href = loginUrl;
+        window.location.href = verifyUrl;
       }, 3000);
     } catch (err) {
       if (err instanceof ApiError) {

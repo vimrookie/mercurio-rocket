@@ -186,7 +186,7 @@
     "signIn": "Iniciar sesión",
     "termsAgreement": "Al registrarte, aceptas nuestros Términos de Servicio y Política de Privacidad",
     "welcomeTitle": "¡Bienvenido a Mercurio!",
-    "successMessage": "¡Tu cuenta ha sido creada exitosamente! Redirigiendo al inicio de sesión...",
+    "successMessage": "¡Tu cuenta ha sido creada! Te enviamos un código de verificación a tu correo. Redirigiéndote para verificar tu cuenta...",
     "passwordsNoMatch": "Las contraseñas no coinciden",
     "passwordRequirement": "La contraseña debe contener",
     "passwordMinLength": "al menos 8 caracteres",

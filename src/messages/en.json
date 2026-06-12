@@ -186,7 +186,7 @@
     "signIn": "Sign in",
     "termsAgreement": "By signing up, you agree to our Terms of Service and Privacy Policy",
     "welcomeTitle": "Welcome to Mercurio!",
-    "successMessage": "Your account has been created successfully! Redirecting you to login...",
+    "successMessage": "Your account has been created! We sent a verification code to your email. Redirecting you to verify your account...",
     "passwordsNoMatch": "Passwords do not match",
     "passwordRequirement": "Password must contain",
     "passwordMinLength": "at least 8 characters",
