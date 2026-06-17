@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useIntl } from '@/i18n/IntlProvider';
 import { appUrl, localeHref } from '@/lib/urls';
 import { CONTACT_EMAIL } from '@/lib/pricing';
+import { COMPANY } from '@/lib/company';
 import MercurioLogo from '@/components/shared/MercurioLogo';
 
 interface FooterColumn {
@@ -29,13 +30,18 @@ const Footer: React.FC = () => {
     },
     {
       titleKey: 'footer.companyTitle',
-      links: [{ labelKey: 'footer.contact', href: `mailto:${CONTACT_EMAIL}`, external: true }],
+      links: [
+        { labelKey: 'footer.contact', href: `mailto:${CONTACT_EMAIL}`, external: true },
+        { labelKey: 'footer.whatsapp', href: COMPANY.whatsappUrl, external: true },
+      ],
     },
     {
       titleKey: 'footer.legalTitle',
       links: [
-        { labelKey: 'footer.privacy', href: `${localeHref(locale)}#faq` },
-        { labelKey: 'footer.terms', href: `${localeHref(locale)}#faq` },
+        { labelKey: 'footer.terms', href: localeHref(locale, 'terminos') },
+        { labelKey: 'footer.privacy', href: localeHref(locale, 'privacidad') },
+        { labelKey: 'footer.refunds', href: localeHref(locale, 'reembolsos') },
+        { labelKey: 'footer.complaints', href: localeHref(locale, 'libro-de-reclamaciones') },
       ],
     },
   ];
@@ -77,9 +83,22 @@ const Footer: React.FC = () => {
             <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.6 }}>
               {t('footer.tagline')}
             </Typography>
-            <MuiLink href={`mailto:${CONTACT_EMAIL}`} sx={{ ...linkSx, display: 'inline-block', mt: 2 }}>
-              {CONTACT_EMAIL}
-            </MuiLink>
+            {/* Contact data required by Culqi: número, correo, dirección. */}
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="body2" sx={{ color: 'text.disabled', lineHeight: 1.7 }}>
+                {COMPANY.legalName} · RUC {COMPANY.ruc}
+                <br />
+                {COMPANY.address}
+              </Typography>
+              <Stack spacing={0.5} sx={{ mt: 1.5 }}>
+                <MuiLink href={`mailto:${CONTACT_EMAIL}`} sx={linkSx}>
+                  {CONTACT_EMAIL}
+                </MuiLink>
+                <MuiLink href={COMPANY.whatsappUrl} target="_blank" rel="noopener" sx={linkSx}>
+                  {COMPANY.phone}
+                </MuiLink>
+              </Stack>
+            </Box>
           </Box>
 
           {/* Link columns */}

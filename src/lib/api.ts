@@ -70,3 +70,62 @@ export async function signupOrganization(data: SignupRequest): Promise<SignupRes
 
   return responseData;
 }
+
+// ---------------------------------------------------------------------------
+// Libro de Reclamaciones (Hoja de Reclamación — Ley N° 29571)
+// Mirrors `ComplaintRequest` / the POST /complaints contract in mercurio-api
+// (src/types/complaint.types.ts, src/handlers/complaints/create.ts).
+// ---------------------------------------------------------------------------
+
+export type ConsumerDocumentType = 'DNI' | 'CE' | 'RUC' | 'PASAPORTE';
+export type ComplaintItemType = 'producto' | 'servicio';
+export type ComplaintKind = 'reclamo' | 'queja';
+
+export interface ComplaintRequest {
+  fullName: string;
+  documentType: ConsumerDocumentType;
+  documentNumber: string;
+  email: string;
+  phone?: string;
+  address?: string;
+  isMinor?: boolean;
+  itemType: ComplaintItemType;
+  itemDescription: string;
+  amount?: number;
+  kind: ComplaintKind;
+  detail: string;
+  /** El "pedido" del consumidor. */
+  request: string;
+}
+
+export interface ComplaintResponse {
+  /** Human-facing correlative, e.g. "2026-000123". */
+  correlative: string;
+  status: string;
+}
+
+/**
+ * File a Libro de Reclamaciones entry. The backend assigns a correlative
+ * number and emails a copy to the consumer and to Mercurio.
+ */
+export async function submitComplaint(data: ComplaintRequest): Promise<ComplaintResponse> {
+  const response = await fetch(`${API_BASE_URL}/complaints`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+
+  const responseData = await response.json();
+
+  if (!response.ok) {
+    throw new ApiError(
+      response.status,
+      responseData.error || responseData.message || 'No se pudo registrar el reclamo',
+      responseData.details
+    );
+  }
+
+  return responseData.data as ComplaintResponse;
+}

@@ -4,7 +4,7 @@
  * Synced to the Culqi PEN plan contract published by Lane 2 (B1) in
  * RELEASE-TASKS.md and to `BillingPlan` / `CULQI_PLAN_PRICES` in
  * mercurio-api (`src/types/billing.types.ts`): the only billable plans are
- * `free` (S/0), `pro` (S/49.00/mo → 4900 céntimos) and `enterprise` (custom).
+ * `free` (S/0), `pro` (S/29.00/mo → 2900 céntimos) and `enterprise` (custom).
  * Legacy starter/growth map to pro and business maps to enterprise.
  *
  * When Culqi plan amounts change, update `pricePen` here only.
@@ -52,7 +52,7 @@ export const PRICING_PLANS: PricingPlan[] = [
     id: 'pro',
     nameKey: 'pricing.pro',
     descKey: 'pricing.proDesc',
-    pricePen: 49,
+    pricePen: 29,
     periodKey: 'pricing.perMonth',
     featureKeys: [
       'pricing.proFeature1',
