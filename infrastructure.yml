@@ -81,7 +81,7 @@ Resources:
         Aliases: !If [HasCustomDomain, [!Ref DomainName], !Ref "AWS::NoValue"]
         ViewerCertificate: !If 
           - HasCustomDomain
-          - AcmCertificateArn: "arn:aws:acm:us-east-1:885910645729:certificate/ded79c68-0624-433f-a97b-85731248759f"
+          - AcmCertificateArn: "arn:aws:acm:us-east-1:885910645729:certificate/57fd0c07-9c64-44d7-bb40-b5ab66aebab9"
             SslSupportMethod: sni-only
             MinimumProtocolVersion: TLSv1.2_2021
           - !Ref "AWS::NoValue"
