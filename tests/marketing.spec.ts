@@ -16,35 +16,45 @@ test.describe('Marketing site', () => {
   test('Spanish home renders hero, nav and pricing', async ({ page }) => {
     await page.goto('/es/');
 
-    await expect(page.getByRole('heading', { name: /procesa tus comprobantes/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /sabe quién te pagó el alquiler/i })).toBeVisible();
     // Nav present with a pricing link
     await expect(page.getByRole('link', { name: /precios/i }).first()).toBeVisible();
     // Pricing section shows the real Culqi PEN price for Pro
-    await expect(page.getByText('S/49').first()).toBeVisible();
+    await expect(page.getByText('S/29').first()).toBeVisible();
     await expect(page.getByText(/culqi/i).first()).toBeVisible();
   });
 
   test('English home renders translated hero', async ({ page }) => {
     await page.goto('/en/');
-    await expect(page.getByRole('heading', { name: /process your receipts/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /know who paid the rent/i })).toBeVisible();
   });
 
   test('dedicated pricing page lists the three plans', async ({ page }) => {
     await page.goto('/es/pricing/');
     await expect(page.getByRole('heading', { name: /gratis/i }).first()).toBeVisible();
     await expect(page.getByRole('heading', { name: /^pro$/i }).first()).toBeVisible();
-    await expect(page.getByRole('heading', { name: /empresarial/i }).first()).toBeVisible();
-    await expect(page.getByText('S/49').first()).toBeVisible();
+    await expect(page.getByRole('heading', { name: /administradoras/i }).first()).toBeVisible();
+    await expect(page.getByText('S/29').first()).toBeVisible();
   });
 
   test('language switch swaps locale and URL', async ({ page }) => {
     await page.goto('/es/');
-    await expect(page.getByRole('heading', { name: /procesa tus comprobantes/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /sabe quién te pagó el alquiler/i })).toBeVisible();
 
     await page.getByRole('button', { name: /toggle language/i }).first().click();
 
     await page.waitForURL(/\/en\/?$/, { timeout: 10000 });
-    await expect(page.getByRole('heading', { name: /process your receipts/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /know who paid the rent/i })).toBeVisible();
+  });
+
+  test('home exposes FAQ structured data matching the visible FAQ', async ({ page }) => {
+    await page.goto('/es/');
+    const raw = await page.locator('script[type="application/ld+json"]').first().textContent();
+    const data = JSON.parse(raw ?? '{}') as { '@graph': Array<{ '@type': string; mainEntity?: Array<{ name: string }> }> };
+    const faq = data['@graph'].find((node) => node['@type'] === 'FAQPage');
+    expect(faq?.mainEntity?.length).toBe(8);
+    const firstQuestion = faq?.mainEntity?.[0]?.name ?? '';
+    await expect(page.getByRole('button', { name: firstQuestion })).toBeVisible();
   });
 
   test('primary hero CTA links to signup', async ({ page }) => {

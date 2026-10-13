@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Box, Container, Typography } from '@mui/material';
-import { WhatsApp, AutoAwesome, TableChart } from '@mui/icons-material';
+import { PersonAdd, WhatsApp, FactCheck } from '@mui/icons-material';
 import { useIntl } from '@/i18n/IntlProvider';
 
 interface Step {
@@ -13,9 +13,9 @@ interface Step {
 }
 
 const STEPS: Step[] = [
-  { icon: <WhatsApp />, color: '#00bcd4', titleKey: 'howItWorks.step1Title', descKey: 'howItWorks.step1Desc' },
-  { icon: <AutoAwesome />, color: '#BDBDBD', titleKey: 'howItWorks.step2Title', descKey: 'howItWorks.step2Desc' },
-  { icon: <TableChart />, color: '#4CAF50', titleKey: 'howItWorks.step3Title', descKey: 'howItWorks.step3Desc' },
+  { icon: <PersonAdd />, color: '#BDBDBD', titleKey: 'howItWorks.step1Title', descKey: 'howItWorks.step1Desc' },
+  { icon: <WhatsApp />, color: '#25D366', titleKey: 'howItWorks.step2Title', descKey: 'howItWorks.step2Desc' },
+  { icon: <FactCheck />, color: '#4CAF50', titleKey: 'howItWorks.step3Title', descKey: 'howItWorks.step3Desc' },
 ];
 
 const HowItWorks: React.FC = () => {
@@ -86,7 +86,7 @@ const HowItWorks: React.FC = () => {
                   {index + 1}
                 </Box>
               </Box>
-              <Typography variant="h6" sx={{ mb: 1.5, color: 'white', fontWeight: 600 }}>
+              <Typography variant="h6" component="h3" sx={{ mb: 1.5, color: 'white', fontWeight: 600 }}>
                 {t(step.titleKey)}
               </Typography>
               <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.7 }}>

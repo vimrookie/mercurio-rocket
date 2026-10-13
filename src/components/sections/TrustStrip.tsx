@@ -2,38 +2,49 @@
 
 import React from 'react';
 import { Box, Container, Typography } from '@mui/material';
-import { VerifiedUser, Lock, Translate, Cloud, Bolt } from '@mui/icons-material';
+import { ReceiptLong } from '@mui/icons-material';
 import { useIntl } from '@/i18n/IntlProvider';
 
-const ITEMS: Array<{ icon: React.ReactElement; key: string }> = [
-  { icon: <VerifiedUser />, key: 'trust.multiTenant' },
-  { icon: <Lock />, key: 'trust.encryption' },
-  { icon: <Translate />, key: 'trust.bilingual' },
-  { icon: <Cloud />, key: 'trust.aws' },
-  { icon: <Bolt />, key: 'trust.serverless' },
-];
-
 /**
- * Honest, capability-based trust strip — replaces the previous invented
- * usage statistics (no real customers yet, pre-release).
+ * Receipt types Mercurio can read today. Keep in sync with the parser
+ * templates shipped in mercurio-api (`templates/*-preview.jpeg`).
  */
+const RECEIPT_KEYS = [
+  'receipts.yape',
+  'receipts.plinBbva',
+  'receipts.plinInterbank',
+  'receipts.plinScotiabank',
+  'receipts.bcp',
+  'receipts.binance',
+] as const;
+
 const TrustStrip: React.FC = () => {
   const { t } = useIntl();
 
   return (
-    <Box sx={{ py: 5, background: '#13161c', borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+    <Box
+      component="section"
+      aria-labelledby="receipts-title"
+      sx={{ py: 5, background: '#13161c', borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}
+    >
       <Container maxWidth="lg">
-        <Typography variant="body2" sx={{ textAlign: 'center', color: 'text.disabled', mb: 3, textTransform: 'uppercase', letterSpacing: 1 }}>
-          {t('trust.title')}
+        <Typography
+          id="receipts-title"
+          variant="body2"
+          component="h2"
+          sx={{ textAlign: 'center', color: 'text.disabled', mb: 3, textTransform: 'uppercase', letterSpacing: 1 }}
+        >
+          {t('receipts.title')}
         </Typography>
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: { xs: 2.5, md: 5 }, justifyContent: 'center', alignItems: 'center' }}>
-          {ITEMS.map((item) => (
-            <Box key={item.key} sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'text.secondary' }}>
-              {React.cloneElement(item.icon as React.ReactElement<{ sx?: object }>, {
-                sx: { color: 'primary.main', fontSize: 20 },
-              })}
+        <Box
+          component="ul"
+          sx={{ listStyle: 'none', p: 0, m: 0, display: 'flex', flexWrap: 'wrap', gap: { xs: 2.5, md: 5 }, justifyContent: 'center', alignItems: 'center' }}
+        >
+          {RECEIPT_KEYS.map((key) => (
+            <Box component="li" key={key} sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'text.secondary' }}>
+              <ReceiptLong sx={{ color: 'primary.main', fontSize: 20 }} />
               <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                {t(item.key)}
+                {t(key)}
               </Typography>
             </Box>
           ))}

@@ -42,7 +42,7 @@ test.describe('User Registration Flow', () => {
     ).toBeVisible({ timeout: 10000 });
 
     // Step 2: Fill registration form
-    await page.getByLabel(/organization name/i).fill(testUser.organizationName);
+    await page.getByLabel(/business or property/i).fill(testUser.organizationName);
     await page.getByLabel(/first name/i).fill(testUser.firstName);
     await page.getByLabel(/last name/i).fill(testUser.lastName);
     await page.getByLabel(/email/i).fill(testUser.email);
@@ -98,7 +98,7 @@ test.describe('User Registration Flow', () => {
     ).toBeVisible({ timeout: 10000 });
 
     // Fill form with weak password
-    await page.getByLabel(/organization name/i).fill('Test Org Weak Password');
+    await page.getByLabel(/business or property/i).fill('Test Org Weak Password');
     await page.getByLabel(/first name/i).fill('Test');
     await page.getByLabel(/last name/i).fill('User');
     await page.getByLabel(/email/i).fill('weak-password-test@example.com');
@@ -128,7 +128,7 @@ test.describe('User Registration Flow', () => {
     ).toBeVisible({ timeout: 10000 });
 
     // Fill form with mismatched passwords
-    await page.getByLabel(/organization name/i).fill('Test Org Mismatch');
+    await page.getByLabel(/business or property/i).fill('Test Org Mismatch');
     await page.getByLabel(/first name/i).fill('Test');
     await page.getByLabel(/last name/i).fill('User');
     await page.getByLabel(/email/i).fill('mismatch-test@example.com');

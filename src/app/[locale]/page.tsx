@@ -1,13 +1,14 @@
 import type { Metadata } from 'next';
 import { getMessages, isLocale, translate, Locale } from '@/i18n/config';
 import { buildMetadata } from '@/lib/seo';
+import { buildHomeStructuredData, serializeJsonLd } from '@/lib/structuredData';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import LaunchPad from '@/components/rocket/LaunchPad';
 import TrustStrip from '@/components/sections/TrustStrip';
+import PainPoints from '@/components/sections/PainPoints';
 import HowItWorks from '@/components/sections/HowItWorks';
 import RocketFeatures from '@/components/rocket/RocketFeatures';
-import Integrations from '@/components/sections/Integrations';
 import FuelPricing from '@/components/rocket/FuelPricing';
 import FAQ from '@/components/sections/FAQ';
 import BlastOff from '@/components/rocket/BlastOff';
@@ -25,16 +26,21 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   });
 }
 
-export default function HomePage() {
+export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  const loc: Locale = isLocale(locale) ? locale : 'es';
+  const structuredData = serializeJsonLd(buildHomeStructuredData(loc, getMessages(loc)));
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: structuredData }} />
       <Navbar />
       <main>
         <LaunchPad />
         <TrustStrip />
+        <PainPoints />
         <HowItWorks />
         <RocketFeatures />
-        <Integrations />
         <FuelPricing />
         <FAQ />
         <BlastOff />

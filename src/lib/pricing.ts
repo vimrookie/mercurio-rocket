@@ -24,7 +24,7 @@ export interface PricingPlan {
   periodKey: 'pricing.perMonth' | 'pricing.forever' | null;
   featureKeys: string[];
   buttonKey: string;
-  /** Where the plan CTA points: the signup flow or a sales contact. */
+  /** Where the plan CTA points: the signup flow or a WhatsApp conversation. */
   ctaTarget: 'signup' | 'contact';
   popular: boolean;
 }
@@ -42,7 +42,6 @@ export const PRICING_PLANS: PricingPlan[] = [
       'pricing.freeFeature3',
       'pricing.freeFeature4',
       'pricing.freeFeature5',
-      'pricing.freeFeature6',
     ],
     buttonKey: 'pricing.freeButton',
     ctaTarget: 'signup',
@@ -61,7 +60,6 @@ export const PRICING_PLANS: PricingPlan[] = [
       'pricing.proFeature4',
       'pricing.proFeature5',
       'pricing.proFeature6',
-      'pricing.proFeature7',
     ],
     buttonKey: 'pricing.proButton',
     ctaTarget: 'signup',
@@ -78,9 +76,6 @@ export const PRICING_PLANS: PricingPlan[] = [
       'pricing.enterpriseFeature2',
       'pricing.enterpriseFeature3',
       'pricing.enterpriseFeature4',
-      'pricing.enterpriseFeature5',
-      'pricing.enterpriseFeature6',
-      'pricing.enterpriseFeature7',
     ],
     buttonKey: 'pricing.enterpriseButton',
     ctaTarget: 'contact',

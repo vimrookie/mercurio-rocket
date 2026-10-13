@@ -5,7 +5,8 @@ import { Box, Container, Typography, Card, CardContent, Button, List, ListItem, 
 import { Check, RocketLaunch, Star } from '@mui/icons-material';
 import Link from 'next/link';
 import { useIntl } from '@/i18n/IntlProvider';
-import { PRICING_PLANS, PEN_SYMBOL, CONTACT_EMAIL, PricingPlan } from '@/lib/pricing';
+import { PRICING_PLANS, PEN_SYMBOL, PricingPlan } from '@/lib/pricing';
+import { COMPANY } from '@/lib/company';
 import { localeHref } from '@/lib/urls';
 
 interface FuelPricingProps {
@@ -17,7 +18,7 @@ const FuelPricing: React.FC<FuelPricingProps> = ({ showHeader = true }) => {
   const { t, locale } = useIntl();
 
   const ctaHref = (plan: PricingPlan): string =>
-    plan.ctaTarget === 'contact' ? `mailto:${CONTACT_EMAIL}` : localeHref(locale, 'signup');
+    plan.ctaTarget === 'contact' ? COMPANY.whatsappUrl : localeHref(locale, 'signup');
 
   return (
     <Box component="section" id="pricing" sx={{ py: 12, background: 'linear-gradient(135deg, #232733 0%, #181C23 100%)' }}>
@@ -132,6 +133,7 @@ const FuelPricing: React.FC<FuelPricingProps> = ({ showHeader = true }) => {
                       startIcon={<RocketLaunch />}
                       component={plan.ctaTarget === 'contact' ? 'a' : Link}
                       href={ctaHref(plan)}
+                      {...(plan.ctaTarget === 'contact' ? { target: '_blank', rel: 'noopener' } : {})}
                       sx={{
                         mt: 4,
                         py: 1.5,

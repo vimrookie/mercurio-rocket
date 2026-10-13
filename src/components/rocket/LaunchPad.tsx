@@ -2,11 +2,34 @@
 
 import React from 'react';
 import { Box, Container, Typography, Button, Card, CardContent, Chip } from '@mui/material';
-import { RocketLaunch, AutoAwesome, Speed, Security, ArrowDownward } from '@mui/icons-material';
+import { RocketLaunch, ArrowDownward, CheckCircle, Schedule, ErrorOutline } from '@mui/icons-material';
 import Link from 'next/link';
 import { useIntl } from '@/i18n/IntlProvider';
 import { localeHref } from '@/lib/urls';
 import MercurioLogo from '../shared/MercurioLogo';
+
+type PaymentStatus = 'paid' | 'due' | 'overdue';
+
+interface BoardRow {
+  labelKey: string;
+  amount: string;
+  status: PaymentStatus;
+  statusKey: string;
+}
+
+/** Illustrative data for the hero board. Totals must match `hero.board.summary`. */
+const BOARD_ROWS: BoardRow[] = [
+  { labelKey: 'hero.board.row1', amount: '1,200', status: 'paid', statusKey: 'hero.board.paidYape' },
+  { labelKey: 'hero.board.row2', amount: '450', status: 'due', statusKey: 'hero.board.dueToday' },
+  { labelKey: 'hero.board.row3', amount: '950', status: 'overdue', statusKey: 'hero.board.overdue' },
+  { labelKey: 'hero.board.row4', amount: '2,000', status: 'paid', statusKey: 'hero.board.paidBcp' },
+];
+
+const STATUS_STYLES: Record<PaymentStatus, { color: string; icon: React.ReactElement }> = {
+  paid: { color: '#4CAF50', icon: <CheckCircle fontSize="small" /> },
+  due: { color: '#FFB300', icon: <Schedule fontSize="small" /> },
+  overdue: { color: '#F44336', icon: <ErrorOutline fontSize="small" /> },
+};
 
 const LaunchPad: React.FC = () => {
   const { t, locale } = useIntl();
@@ -108,37 +131,63 @@ const LaunchPad: React.FC = () => {
             </Typography>
           </Box>
 
-          {/* Feature Cards */}
+          {/* Example receivables board: shows the outcome, not the technology */}
           <Box sx={{ flex: 1, minWidth: 300 }}>
-            <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
-              <Box sx={{ flex: '1 1 45%', minWidth: 200 }}>
-                <Card sx={{ height: '100%', background: 'rgba(35, 39, 51, 0.8)', backdropFilter: 'blur(10px)', border: '1px solid rgba(189, 189, 189, 0.2)' }}>
-                  <CardContent sx={{ textAlign: 'center', p: 3 }}>
-                    <AutoAwesome sx={{ fontSize: 40, color: 'primary.main', mb: 2 }} />
-                    <Typography variant="h6" sx={{ mb: 1, color: 'white' }}>{t('hero.ocrAccuracy')}</Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{t('hero.ocrAccuracyDesc')}</Typography>
-                  </CardContent>
-                </Card>
-              </Box>
-              <Box sx={{ flex: '1 1 45%', minWidth: 200 }}>
-                <Card sx={{ height: '100%', background: 'rgba(35, 39, 51, 0.8)', backdropFilter: 'blur(10px)', border: '1px solid rgba(0, 188, 212, 0.3)' }}>
-                  <CardContent sx={{ textAlign: 'center', p: 3 }}>
-                    <Speed sx={{ fontSize: 40, color: 'secondary.main', mb: 2 }} />
-                    <Typography variant="h6" sx={{ mb: 1, color: 'white' }}>{t('hero.realTimeProcessing')}</Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{t('hero.realTimeProcessingDesc')}</Typography>
-                  </CardContent>
-                </Card>
-              </Box>
-              <Box sx={{ flex: '1 1 100%', minWidth: 200 }}>
-                <Card sx={{ background: 'rgba(35, 39, 51, 0.8)', backdropFilter: 'blur(10px)', border: '1px solid rgba(189, 189, 189, 0.2)' }}>
-                  <CardContent sx={{ textAlign: 'center', p: 3 }}>
-                    <Security sx={{ fontSize: 40, color: 'primary.main', mb: 2 }} />
-                    <Typography variant="h6" sx={{ mb: 1, color: 'white' }}>{t('hero.enterpriseSecurity')}</Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{t('hero.enterpriseSecurityDesc')}</Typography>
-                  </CardContent>
-                </Card>
-              </Box>
-            </Box>
+            <Card
+              role="img"
+              aria-label={t('hero.board.ariaLabel')}
+              sx={{
+                background: 'rgba(35, 39, 51, 0.85)',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(189, 189, 189, 0.2)',
+                boxShadow: '0 24px 48px rgba(0, 0, 0, 0.35)',
+              }}
+            >
+              <CardContent sx={{ p: { xs: 2.5, sm: 3.5 } }}>
+                <Typography variant="h6" component="p" sx={{ color: 'white', fontWeight: 700 }}>
+                  {t('hero.board.title')}
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2.5 }}>
+                  {t('hero.board.summary')}
+                </Typography>
+                {BOARD_ROWS.map((row) => {
+                  const status = STATUS_STYLES[row.status];
+                  return (
+                    <Box
+                      key={row.labelKey}
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1.5,
+                        py: 1.5,
+                        borderTop: '1px solid rgba(255, 255, 255, 0.06)',
+                      }}
+                    >
+                      <Box sx={{ flex: 1, minWidth: 0 }}>
+                        <Typography variant="body1" sx={{ color: 'white', fontWeight: 600 }} noWrap>
+                          {t(row.labelKey)}
+                        </Typography>
+                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                          S/ {row.amount}
+                        </Typography>
+                      </Box>
+                      <Chip
+                        size="small"
+                        icon={status.icon}
+                        label={t(row.statusKey)}
+                        sx={{
+                          color: status.color,
+                          background: `${status.color}1F`,
+                          border: `1px solid ${status.color}55`,
+                          fontWeight: 600,
+                          '& .MuiChip-icon': { color: status.color },
+                        }}
+                      />
+                    </Box>
+                  );
+                })}
+              </CardContent>
+            </Card>
           </Box>
         </Box>
       </Container>

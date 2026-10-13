@@ -143,9 +143,6 @@ const Footer: React.FC = () => {
           <Typography variant="body2" sx={{ color: 'text.disabled' }}>
             © {year} Mercurio. {t('footer.rights')}
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.disabled' }}>
-            {t('cta.footerTagline')}
-          </Typography>
         </Box>
       </Container>
     </Box>

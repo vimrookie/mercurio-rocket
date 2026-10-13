@@ -2,19 +2,19 @@
 
 import React from 'react';
 import { Box, Container, Typography, Button } from '@mui/material';
-import { RocketLaunch, Email } from '@mui/icons-material';
+import { RocketLaunch, WhatsApp } from '@mui/icons-material';
 import Link from 'next/link';
 import { useIntl } from '@/i18n/IntlProvider';
 import { localeHref } from '@/lib/urls';
-import { CONTACT_EMAIL } from '@/lib/pricing';
+import { COMPANY } from '@/lib/company';
 
 const BlastOff: React.FC = () => {
   const { t, locale } = useIntl();
 
   const stats = [
-    { value: t('cta.setupTime'), label: t('cta.setupTimeLabel'), color: 'primary.main' },
-    { value: t('cta.noCreditCard'), label: t('cta.noCreditCardLabel'), color: 'secondary.main' },
-    { value: t('cta.bilingual'), label: t('cta.bilingualLabel'), color: 'primary.main' },
+    { value: t('cta.stat1Value'), label: t('cta.stat1Label'), color: 'primary.main' },
+    { value: t('cta.stat2Value'), label: t('cta.stat2Label'), color: 'secondary.main' },
+    { value: t('cta.stat3Value'), label: t('cta.stat3Label'), color: 'primary.main' },
   ];
 
   return (
@@ -66,9 +66,11 @@ const BlastOff: React.FC = () => {
           <Button
             variant="outlined"
             size="large"
-            startIcon={<Email />}
+            startIcon={<WhatsApp />}
             component="a"
-            href={`mailto:${CONTACT_EMAIL}`}
+            href={COMPANY.whatsappUrl}
+            target="_blank"
+            rel="noopener"
             sx={{
               borderColor: 'secondary.main',
               color: 'secondary.main',
@@ -78,7 +80,7 @@ const BlastOff: React.FC = () => {
               '&:hover': { borderColor: 'secondary.light', backgroundColor: 'rgba(0, 188, 212, 0.08)' },
             }}
           >
-            {t('cta.contactSales')}
+            {t('cta.whatsapp')}
           </Button>
         </Box>
 

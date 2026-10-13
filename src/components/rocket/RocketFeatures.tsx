@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Box, Container, Typography, Card, CardContent } from '@mui/material';
-import { Psychology, WhatsApp, TableChart, CloudQueue, Security, Group, SmartToy } from '@mui/icons-material';
+import { FactCheck, DocumentScanner, WhatsApp, ContentCopy, Link as LinkIcon, TableChart } from '@mui/icons-material';
 import { useIntl } from '@/i18n/IntlProvider';
 
 interface FeatureItem {
@@ -13,13 +13,12 @@ interface FeatureItem {
 }
 
 const featureDefinitions: FeatureItem[] = [
-  { icon: <Psychology />, titleKey: 'features.intelligentOcr', descriptionKey: 'features.intelligentOcrDesc', color: '#BDBDBD' },
-  { icon: <WhatsApp />, titleKey: 'features.whatsappIntegration', descriptionKey: 'features.whatsappIntegrationDesc', color: '#00bcd4' },
-  { icon: <TableChart />, titleKey: 'features.googleSheetsSync', descriptionKey: 'features.googleSheetsSyncDesc', color: '#4CAF50' },
-  { icon: <CloudQueue />, titleKey: 'features.awsServerless', descriptionKey: 'features.awsServerlessDesc', color: '#FF9500' },
-  { icon: <Security />, titleKey: 'features.enterpriseSecurity', descriptionKey: 'features.enterpriseSecurityDesc', color: '#F44336' },
-  { icon: <Group />, titleKey: 'features.teamManagement', descriptionKey: 'features.teamManagementDesc', color: '#9C27B0' },
-  { icon: <SmartToy />, titleKey: 'features.customParsers', descriptionKey: 'features.customParsersDesc', color: '#2196F3' },
+  { icon: <FactCheck />, titleKey: 'features.receivables', descriptionKey: 'features.receivablesDesc', color: '#4CAF50' },
+  { icon: <DocumentScanner />, titleKey: 'features.reading', descriptionKey: 'features.readingDesc', color: '#BDBDBD' },
+  { icon: <WhatsApp />, titleKey: 'features.whatsapp', descriptionKey: 'features.whatsappDesc', color: '#25D366' },
+  { icon: <ContentCopy />, titleKey: 'features.duplicates', descriptionKey: 'features.duplicatesDesc', color: '#FF9500' },
+  { icon: <LinkIcon />, titleKey: 'features.matching', descriptionKey: 'features.matchingDesc', color: '#00bcd4' },
+  { icon: <TableChart />, titleKey: 'features.sheets', descriptionKey: 'features.sheetsDesc', color: '#2196F3' },
 ];
 
 const RocketFeatures: React.FC = () => {
@@ -70,7 +69,7 @@ const RocketFeatures: React.FC = () => {
                   <Box sx={{ display: 'inline-flex', p: 2, borderRadius: 2, background: `${feature.color}20`, color: feature.color, mb: 3 }}>
                     {React.cloneElement(feature.icon as React.ReactElement<{ fontSize?: string }>, { fontSize: 'large' })}
                   </Box>
-                  <Typography variant="h6" sx={{ mb: 2, color: 'white', fontWeight: 600 }}>
+                  <Typography variant="h6" component="h3" sx={{ mb: 2, color: 'white', fontWeight: 600 }}>
                     {t(feature.titleKey)}
                   </Typography>
                   <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.6 }}>

@@ -4,9 +4,9 @@ import React from 'react';
 import { Box, Container, Typography, Accordion, AccordionSummary, AccordionDetails, Link as MuiLink } from '@mui/material';
 import { ExpandMore } from '@mui/icons-material';
 import { useIntl } from '@/i18n/IntlProvider';
+import { FAQ_ITEMS } from '@/lib/faq';
+import { COMPANY } from '@/lib/company';
 import { CONTACT_EMAIL } from '@/lib/pricing';
-
-const QUESTION_KEYS = ['q1', 'q2', 'q3', 'q4', 'q5'] as const;
 
 const FAQ: React.FC = () => {
   const { t } = useIntl();
@@ -33,9 +33,9 @@ const FAQ: React.FC = () => {
           </Typography>
         </Box>
 
-        {QUESTION_KEYS.map((q, index) => (
+        {FAQ_ITEMS.map((item, index) => (
           <Accordion
-            key={q}
+            key={item.questionKey}
             disableGutters
             elevation={0}
             sx={{
@@ -51,17 +51,21 @@ const FAQ: React.FC = () => {
               aria-controls={`faq-${index}-content`}
               id={`faq-${index}-header`}
             >
-              <Typography sx={{ color: 'white', fontWeight: 600 }}>{t(`faq.${q}`)}</Typography>
+              <Typography sx={{ color: 'white', fontWeight: 600 }}>{t(item.questionKey)}</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.7 }}>
-                {t(`faq.a${index + 1}`)}
+                {t(item.answerKey)}
               </Typography>
             </AccordionDetails>
           </Accordion>
         ))}
 
         <Typography variant="body2" sx={{ textAlign: 'center', color: 'text.secondary', mt: 4 }}>
+          <MuiLink href={COMPANY.whatsappUrl} target="_blank" rel="noopener" sx={{ color: 'primary.main', textDecoration: 'none' }}>
+            WhatsApp {COMPANY.phone}
+          </MuiLink>
+          {' · '}
           <MuiLink href={`mailto:${CONTACT_EMAIL}`} sx={{ color: 'primary.main', textDecoration: 'none' }}>
             {CONTACT_EMAIL}
           </MuiLink>
