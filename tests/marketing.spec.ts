@@ -16,7 +16,7 @@ test.describe('Marketing site', () => {
   test('Spanish home renders hero, nav and pricing', async ({ page }) => {
     await page.goto('/es/');
 
-    await expect(page.getByRole('heading', { name: /sabe quién te pagó el alquiler/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /sabe quién te pagó/i })).toBeVisible();
     // Nav present with a pricing link
     await expect(page.getByRole('link', { name: /precios/i }).first()).toBeVisible();
     // Pricing section shows the real Culqi PEN price for Pro
@@ -26,25 +26,25 @@ test.describe('Marketing site', () => {
 
   test('English home renders translated hero', async ({ page }) => {
     await page.goto('/en/');
-    await expect(page.getByRole('heading', { name: /know who paid the rent/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /know who paid you/i })).toBeVisible();
   });
 
   test('dedicated pricing page lists the three plans', async ({ page }) => {
     await page.goto('/es/pricing/');
     await expect(page.getByRole('heading', { name: /gratis/i }).first()).toBeVisible();
     await expect(page.getByRole('heading', { name: /^pro$/i }).first()).toBeVisible();
-    await expect(page.getByRole('heading', { name: /administradoras/i }).first()).toBeVisible();
+    await expect(page.getByRole('heading', { name: /^empresas$/i }).first()).toBeVisible();
     await expect(page.getByText('S/29').first()).toBeVisible();
   });
 
   test('language switch swaps locale and URL', async ({ page }) => {
     await page.goto('/es/');
-    await expect(page.getByRole('heading', { name: /sabe quién te pagó el alquiler/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /sabe quién te pagó/i })).toBeVisible();
 
     await page.getByRole('button', { name: /toggle language/i }).first().click();
 
     await page.waitForURL(/\/en\/?$/, { timeout: 10000 });
-    await expect(page.getByRole('heading', { name: /know who paid the rent/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /know who paid you/i })).toBeVisible();
   });
 
   test('home exposes FAQ structured data matching the visible FAQ', async ({ page }) => {
@@ -55,6 +55,13 @@ test.describe('Marketing site', () => {
     expect(faq?.mainEntity?.length).toBe(8);
     const firstQuestion = faq?.mainEntity?.[0]?.name ?? '';
     await expect(page.getByRole('button', { name: firstQuestion })).toBeVisible();
+  });
+
+  test('home lists the use cases beyond rentals', async ({ page }) => {
+    await page.goto('/es/');
+    for (const name of [/alquileres/i, /clases y academias/i, /gimnasios y membresías/i, /tiendas y emprendimientos/i]) {
+      await expect(page.getByRole('heading', { name })).toBeVisible();
+    }
   });
 
   test('primary hero CTA links to signup', async ({ page }) => {

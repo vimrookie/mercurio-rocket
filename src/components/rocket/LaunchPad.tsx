@@ -20,9 +20,9 @@ interface BoardRow {
 /** Illustrative data for the hero board. Totals must match `hero.board.summary`. */
 const BOARD_ROWS: BoardRow[] = [
   { labelKey: 'hero.board.row1', amount: '1,200', status: 'paid', statusKey: 'hero.board.paidYape' },
-  { labelKey: 'hero.board.row2', amount: '450', status: 'due', statusKey: 'hero.board.dueToday' },
-  { labelKey: 'hero.board.row3', amount: '950', status: 'overdue', statusKey: 'hero.board.overdue' },
-  { labelKey: 'hero.board.row4', amount: '2,000', status: 'paid', statusKey: 'hero.board.paidBcp' },
+  { labelKey: 'hero.board.row2', amount: '250', status: 'due', statusKey: 'hero.board.dueToday' },
+  { labelKey: 'hero.board.row3', amount: '120', status: 'overdue', statusKey: 'hero.board.overdue' },
+  { labelKey: 'hero.board.row4', amount: '380', status: 'paid', statusKey: 'hero.board.paidBcp' },
 ];
 
 const STATUS_STYLES: Record<PaymentStatus, { color: string; icon: React.ReactElement }> = {

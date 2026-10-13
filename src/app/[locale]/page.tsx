@@ -6,6 +6,7 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import LaunchPad from '@/components/rocket/LaunchPad';
 import TrustStrip from '@/components/sections/TrustStrip';
+import UseCases from '@/components/sections/UseCases';
 import PainPoints from '@/components/sections/PainPoints';
 import HowItWorks from '@/components/sections/HowItWorks';
 import RocketFeatures from '@/components/rocket/RocketFeatures';
@@ -38,6 +39,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <main>
         <LaunchPad />
         <TrustStrip />
+        <UseCases />
         <PainPoints />
         <HowItWorks />
         <RocketFeatures />
