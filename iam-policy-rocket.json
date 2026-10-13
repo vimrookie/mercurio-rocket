@@ -69,7 +69,10 @@
         "cloudfront:PublishFunction",
         "cloudfront:GetFunction",
         "cloudfront:DescribeFunction",
-        "cloudfront:DeleteFunction"
+        "cloudfront:DeleteFunction",
+        "cloudfront:ListTagsForResource",
+        "cloudfront:TagResource",
+        "cloudfront:UntagResource"
       ],
       "Resource": "*"
     },
