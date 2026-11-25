@@ -248,8 +248,8 @@ jobs:
       - name: Validate CloudFormation template
         run: |
           echo "Validating CloudFormation template..."
-          # Basic YAML syntax validation
-          python -c "import yaml; yaml.safe_load(open('infrastructure.yml', 'r'))"
+          # cfn-lint understands CloudFormation tags (!Not, !Ref...); fail on errors only
+          pipx run cfn-lint==1.61.0 --non-zero-exit-code error infrastructure.yml
           echo "CloudFormation template validation completed"
       
       - name: Test production build
